@@ -1,0 +1,11 @@
+Icon:
+  Author: Istiko Rahadi
+  Licensed under the Creative Commons (CCBY)
+  https://creativecommons.org/licenses/by/3.0/us/legalcode
+
+Font:
+  Lato-Regular
+
+Colors:
+  Primary: #F76F72 (salmon)
+  Secondary: #D9D9D9 (grey)
