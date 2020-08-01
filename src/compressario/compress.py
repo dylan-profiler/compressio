@@ -56,16 +56,16 @@ def _(
 
 
 @singledispatch
-def savings(data) -> int:
+def storage_size(data) -> int:
     raise f"Can't compute memory size of objects with type {type(data)}"
 
 
-@savings.register
+@storage_size.register
 def _(data: pd.Series) -> int:
     return data.memory_usage()
 
 
-@savings.register
+@storage_size.register
 def _(data: pd.DataFrame) -> int:
     return data.memory_usage().sum()
 
@@ -86,11 +86,10 @@ class Compress:
 
     @staticmethod
     def savings(
-        self,
         original_data: Union[pd.Series, pd.DataFrame],
         new_data: Union[pd.Series, pd.DataFrame],
         units="MB",
     ) -> Union[pd.Series, pd.DataFrame]:
-        original_size = savings(original_data)
-        new_size = savings(new_data)
+        original_size = storage_size(original_data)
+        new_size = storage_size(new_data)
         return StorageSize(original_size - new_size, units=units)
