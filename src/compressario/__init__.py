@@ -1,0 +1,2 @@
+from compressario.compress import Compress
+from compressario.type_compressions import TypeCompressor

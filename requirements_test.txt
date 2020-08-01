@@ -1,0 +1,7 @@
+
+mypy
+twine>=3.1.1
+pytest>=5.2.0
+pytest-mypy
+pytest-black
+check-manifest>=0.41
