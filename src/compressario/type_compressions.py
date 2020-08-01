@@ -1,5 +1,17 @@
-from visions import Integer, Float, String, Object, Complex, Boolean, Categorical, DateTime
+from visions import (
+    Integer,
+    Float,
+    String,
+    Object,
+    Complex,
+    Boolean,
+    Categorical,
+    DateTime,
+    VisionsBaseType,
+)
+from typing import Type, Callable, Iterable, Union
 import numpy as np
+import pandas as pd
 
 
 class TypeCompressor:
@@ -10,48 +22,55 @@ class TypeCompressor:
             Complex: compress_complex,
             Object: compress_object,
             DateTime: compress_datetime,
-            String: compress_object
+            String: compress_object,
         }
-    
-    def compress(self, series, dtype):
+
+    def compress(self, series: pd.Series, dtype: Type[VisionsBaseType]) -> pd.Series:
         return self.compression_map.get(dtype, lambda x: x)(series)
 
 
-def type_tester(minv, maxv, info_func):
-    def inner(dtype):
+def type_tester(
+    minv: Union[int, float], maxv: Union[int, float], info_func: Callable
+) -> Callable:
+    def inner(dtype: Type[np.dtype]) -> bool:
         type_info = info_func(dtype)
         return minv >= type_info.min and maxv <= type_info.max
+
     return inner
 
 
-def get_compressed_type(type_options, tester):
+def get_compressed_type(
+    type_options: Iterable[Type[np.dtype]], tester: Callable
+) -> Type[np.dtype]:
     for test_type in type_options:
         if tester(test_type):
-            return test_type
+            break
+
+    return test_type
 
 
-def compress_float(series):
+def compress_float(series: pd.Series) -> pd.Series:
     minv, maxv = series.min(), series.max()
     tester = type_tester(minv, maxv, np.finfo)
     test_types = [np.float16, np.float32, np.float64]
-    
+
     compressed_type = get_compressed_type(test_types, tester)
     return series.astype(compressed_type)
 
 
-def compress_integer(series):
+def compress_integer(series: pd.Series) -> pd.Series:
     minv, maxv = series.min(), series.max()
     tester = type_tester(minv, maxv, np.iinfo)
     if minv >= 0:
         test_types = [np.uint8, np.uint16, np.uint32, np.uint64]
     else:
         test_types = [np.int8, np.int16, np.int32, np.int64]
-    
-    compressed_type = get_compressed_type(test_types, tester)      
+
+    compressed_type = get_compressed_type(test_types, tester)
     return series.astype(compressed_type)
 
 
-def compress_complex(series):
+def compress_complex(series: pd.Series) -> pd.Series:
     if series.dtype == np.complex64:
         return series
 
@@ -66,13 +85,13 @@ def compress_complex(series):
 
     if test_real(np.float32) and test_imag(np.float32):
         return series.astype(np.complex64)
-    
+
     return series
 
 
-def compress_object(series):
+def compress_object(series: pd.Series) -> pd.Series:
     try:
-        new_series = series.astype('category')
+        new_series = series.astype("category")
         if new_series.memory_usage() < series.memory_usage():
             return new_series
     except:
@@ -80,14 +99,15 @@ def compress_object(series):
     return series
 
 
-def compress_datetime(series):
+def compress_datetime(series: pd.Series) -> pd.Series:
     try:
-        new_series = series.astype('category')
+        new_series = series.astype("category")
         if new_series.memory_usage() < series.memory_usage():
             return new_series
     except:
         pass
     return series
+
 
 # TODO: Create a period type which checks if dates fall in well defined interval ranges?
 # we can get substantial memory savings from compressing these.
