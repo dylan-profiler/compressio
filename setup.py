@@ -22,6 +22,7 @@ setup(
     description="compressario",
     author="Ian Eaves, Simon Brugman",
     author_email="ian.k.eaves@gmail.com",
+    package_data={find_packages("src"): ["py.typed"]},
     packages=find_packages("src"),
     package_dir={"": "src"},
     install_requires=requirements,
@@ -29,6 +30,7 @@ setup(
     tests_require=test_requirements,
     python_requires=">=3.6",
     long_description=long_description,
+    zip_safe=False,
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
