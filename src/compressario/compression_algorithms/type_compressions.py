@@ -1,33 +1,7 @@
-from typing import Callable, Iterable, Type, Union
+from typing import Callable, Iterable, Type, Union, TypeVar
 
 import numpy as np
 import pandas as pd
-from visions import (
-    Boolean,
-    Categorical,
-    Complex,
-    DateTime,
-    Float,
-    Integer,
-    Object,
-    String,
-    VisionsBaseType,
-)
-
-
-class TypeCompressor:
-    def __init__(self):
-        self.compression_map = {
-            Integer: compress_integer,
-            Float: compress_float,
-            Complex: compress_complex,
-            Object: compress_object,
-            DateTime: compress_datetime,
-            String: compress_object,
-        }
-
-    def compress(self, series: pd.Series, dtype: Type[VisionsBaseType]) -> pd.Series:
-        return self.compression_map.get(dtype, lambda x: x)(series)
 
 
 def type_tester(
