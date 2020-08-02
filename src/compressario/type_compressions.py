@@ -1,17 +1,18 @@
-from visions import (
-    Integer,
-    Float,
-    String,
-    Object,
-    Complex,
-    Boolean,
-    Categorical,
-    DateTime,
-    VisionsBaseType,
-)
-from typing import Type, Callable, Iterable, Union
+from typing import Callable, Iterable, Type, Union
+
 import numpy as np
 import pandas as pd
+from visions import (
+    Boolean,
+    Categorical,
+    Complex,
+    DateTime,
+    Float,
+    Integer,
+    Object,
+    String,
+    VisionsBaseType,
+)
 
 
 class TypeCompressor:
@@ -61,12 +62,21 @@ def compress_float(series: pd.Series) -> pd.Series:
 def compress_integer(series: pd.Series) -> pd.Series:
     minv, maxv = series.min(), series.max()
     tester = type_tester(minv, maxv, np.iinfo)
+
     if minv >= 0:
         test_types = [np.uint8, np.uint16, np.uint32, np.uint64]
     else:
         test_types = [np.int8, np.int16, np.int32, np.int64]
 
     compressed_type = get_compressed_type(test_types, tester)
+
+    if series.hasnans:
+        name = np.dtype(compressed_type).name
+        if minv >= 0:
+            compressed_type = name[0:2].upper() + name[2:]
+        else:
+            compressed_type = name.capitalize()
+
     return series.astype(compressed_type)
 
 
