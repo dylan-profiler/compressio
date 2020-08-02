@@ -15,12 +15,12 @@ def storage_size(data: pdT, deep=False) -> int:
     raise TypeError(f"Can't compute memory size of objects with type {type(data)}")
 
 
-@storage_size.register
+@storage_size.register(pd.Series)
 def _(data: pd.Series, deep=False) -> int:
     return data.memory_usage(deep=deep)
 
 
-@storage_size.register
+@storage_size.register(pd.DataFrame)
 def _(data: pd.DataFrame, deep=False) -> int:
     return data.memory_usage(deep=deep).sum()
 
@@ -32,7 +32,7 @@ def compress_report(
     raise TypeError(f"Can't create a compression report of data type {type(data)}")
 
 
-@compress_report.register
+@compress_report.register(pd.Series)
 def _(data: pd.Series, typeset: VisionsTypeset, compressor: BaseTypeCompressor) -> None:
     before = data.dtype
     compressed = compress_func(data, typeset, compressor)
@@ -42,7 +42,7 @@ def _(data: pd.Series, typeset: VisionsTypeset, compressor: BaseTypeCompressor) 
     )
 
 
-@compress_report.register
+@compress_report.register(pd.DataFrame)
 def _(
     data: pd.DataFrame, typeset: VisionsTypeset, compressor: BaseTypeCompressor
 ) -> None:
