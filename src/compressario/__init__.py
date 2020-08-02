@@ -1,5 +1,10 @@
 from compressario.compress import Compress
-from compressario.diagnostics import compress_report, savings, savings_report, storage_size
+from compressario.diagnostics import (
+    compress_report,
+    savings,
+    savings_report,
+    storage_size,
+)
 from compressario.formatter import StorageSize
 from compressario.type_compressor import BaseTypeCompressor, DefaultCompressor
 from compressario.typing import pdT
