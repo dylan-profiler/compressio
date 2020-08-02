@@ -17,16 +17,15 @@ with (source_root / "requirements_test.txt").open(encoding="utf8") as f:
 
 setup(
     name="compressario",
-    version="0.0.1",
+    version="0.0.2",
     url="https://github.com/ieaves/compressario",
     description="compressario",
-    author="Ian Eaves",
+    author="Ian Eaves, Simon Brugman",
     author_email="ian.k.eaves@gmail.com",
     packages=find_packages("src"),
     package_dir={"": "src"},
     install_requires=requirements,
     include_package_data=True,
-    # extras_require=extras_requires,
     tests_require=test_requirements,
     python_requires=">=3.6",
     long_description=long_description,

@@ -1,40 +1,17 @@
-from compressario.type_compressions import TypeCompressor
-from visions import StandardSet, Date, VisionsTypeset
-import pandas as pd
-import numpy as np
 from functools import singledispatch
 from typing import Union
 
+import pandas as pd
+from visions import StandardSet, VisionsTypeset
 
-class StorageSize(float):
-    _conversion = {
-        "B": lambda x: x,
-        "KB": lambda x: x / 1000,
-        "MB": lambda x: x / 1000 ** 2,
-        "GB": lambda x: x / 1000 ** 3,
-    }
-
-    def __init__(self, total: Union[int, float], units="B"):
-        self.units = units
-        self.total = total
-        float.__init__(total)
-
-    @property
-    def _in_units(self) -> float:
-        return self._conversion[self.units](self.total)
-
-    def __str__(self) -> str:
-        return f"{self._in_units} {self.units}"
-
-    def __repr__(self) -> str:
-        return self.__str__()
+from compressario.type_compressions import TypeCompressor
 
 
 @singledispatch
 def compress_func(
     data, typeset: VisionsTypeset, compressor: TypeCompressor
 ) -> pd.DataFrame:
-    raise f"Can't compress objects of type {type(data)}"
+    raise TypeError(f"Can't compress objects of type {type(data)}")
 
 
 @compress_func.register
@@ -42,7 +19,7 @@ def _(
     data: pd.Series, typeset: VisionsTypeset, compressor: TypeCompressor
 ) -> pd.Series:
     dtype = typeset.detect_series_type(data)
-    return compressor.compress(series, dtype)
+    return compressor.compress(data, dtype)
 
 
 @compress_func.register
@@ -56,18 +33,18 @@ def _(
 
 
 @singledispatch
-def storage_size(data) -> int:
-    raise f"Can't compute memory size of objects with type {type(data)}"
+def storage_size(data, deep=False) -> int:
+    raise TypeError(f"Can't compute memory size of objects with type {type(data)}")
 
 
 @storage_size.register
-def _(data: pd.Series) -> int:
-    return data.memory_usage()
+def _(data: pd.Series, deep=False) -> int:
+    return data.memory_usage(deep=deep)
 
 
 @storage_size.register
-def _(data: pd.DataFrame) -> int:
-    return data.memory_usage().sum()
+def _(data: pd.DataFrame, deep=False) -> int:
+    return data.memory_usage(deep=deep).sum()
 
 
 class Compress:
@@ -82,14 +59,5 @@ class Compress:
     def it(
         self, data: Union[pd.Series, pd.DataFrame]
     ) -> Union[pd.Series, pd.DataFrame]:
-        return compress_func(data, self.typeset, self.type_compressor)
-
-    @staticmethod
-    def savings(
-        original_data: Union[pd.Series, pd.DataFrame],
-        new_data: Union[pd.Series, pd.DataFrame],
-        units="MB",
-    ) -> Union[pd.Series, pd.DataFrame]:
-        original_size = storage_size(original_data)
-        new_size = storage_size(new_data)
-        return StorageSize(original_size - new_size, units=units)
+        data = compress_func(data, self.typeset, self.type_compressor)
+        return data
