@@ -5,8 +5,8 @@ from typing import Union
 import pandas as pd
 from visions import StandardSet, VisionsTypeset
 
-from compressario.typing import pdT
-from compressario.type_compressor import BaseTypeCompressor, DefaultCompressor
+from compressio.typing import pdT
+from compressio.type_compressor import BaseTypeCompressor, DefaultCompressor
 
 
 @singledispatch
