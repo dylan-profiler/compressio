@@ -11,14 +11,15 @@ from compressio.type_compressor import BaseTypeCompressor, DefaultCompressor
 def compress_func(
     data: pdT, typeset: VisionsTypeset, compressor: BaseTypeCompressor
 ) -> pdT:
-    raise TypeError(f"Can't compress objects of type {type(data)}")
+    dtype = typeset.detect_type(data)
+    return compressor.compress(data, dtype)
 
 
 @compress_func.register(pd.Series) # type: ignore
 def _(
     data: pd.Series, typeset: VisionsTypeset, compressor: BaseTypeCompressor
 ) -> pd.Series:
-    dtype = typeset.detect_series_type(data)
+    dtype = typeset.detect_type(data)
     return compressor.compress(data, dtype)
 
 
@@ -26,7 +27,7 @@ def _(
 def _(
     data: pd.DataFrame, typeset: VisionsTypeset, compressor: BaseTypeCompressor
 ) -> pd.DataFrame:
-    dtypes = typeset.detect_frame_type(data)
+    dtypes = typeset.detect_type(data)
     return pd.DataFrame(
         {col: compressor.compress(data[col], dtypes[col]) for col in data.columns}
     )
