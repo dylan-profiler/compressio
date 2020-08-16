@@ -1,5 +1,5 @@
-from compressario.compression_algorithms import type_compressions
-from compressario.compression_algorithms.type_compressions import (
+from compressio.compression_algorithms import type_compressions
+from compressio.compression_algorithms.type_compressions import (
     compress_float,
     compress_integer,
     compress_complex,

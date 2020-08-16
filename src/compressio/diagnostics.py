@@ -1,15 +1,14 @@
 """Work in progress"""
 from functools import singledispatch
-from typing import Union
 
 import pandas as pd
 from visions.typesets import VisionsTypeset
-from compressario.type_compressor import BaseTypeCompressor
-#from compressario.formatter import StorageSize
-from compressario.compress import compress_func
-from compressario.typing import pdT
+from compressio.type_compressor import BaseTypeCompressor
 
-from pint import UnitRegistry, Quantity
+from compressio.compress import compress_func
+from compressio.typing import pdT
+
+from pint import Quantity
 
 
 @singledispatch

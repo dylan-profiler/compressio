@@ -1,5 +1,4 @@
-from typing import Union
-from pint import UnitRegistry, Quantity
+from pint import UnitRegistry
 
 
 ureg = UnitRegistry()
