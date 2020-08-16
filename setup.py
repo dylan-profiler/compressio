@@ -22,7 +22,7 @@ setup(
     description="compressio",
     author="Ian Eaves, Simon Brugman",
     author_email="ian.k.eaves@gmail.com",
-    package_data={'src/compressio': ["py.typed"]},
+    package_data={"src/compressio": ["py.typed"]},
     packages=find_packages("src"),
     package_dir={"": "src"},
     install_requires=requirements,

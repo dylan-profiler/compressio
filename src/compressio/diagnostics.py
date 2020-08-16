@@ -16,14 +16,14 @@ def storage_size(data: pdT, deep=True) -> Quantity:
     raise TypeError(f"Can't compute memory size of objects with type {type(data)}")
 
 
-@storage_size.register(pd.Series) # type: ignore
+@storage_size.register(pd.Series)  # type: ignore
 def _(data: pd.Series, deep) -> Quantity:
-    return Quantity(value=data.memory_usage(deep=deep), units='byte')
+    return Quantity(value=data.memory_usage(deep=deep), units="byte")
 
 
-@storage_size.register(pd.DataFrame) # type: ignore
+@storage_size.register(pd.DataFrame)  # type: ignore
 def _(data: pd.DataFrame, deep=False) -> Quantity:
-    return Quantity(value=data.memory_usage(deep=deep).sum(), units='byte')
+    return Quantity(value=data.memory_usage(deep=deep).sum(), units="byte")
 
 
 @singledispatch
@@ -33,7 +33,7 @@ def compress_report(
     raise TypeError(f"Can't create a compression report of data type {type(data)}")
 
 
-@compress_report.register(pd.Series) # type: ignore
+@compress_report.register(pd.Series)  # type: ignore
 def _(data: pd.Series, typeset: VisionsTypeset, compressor: BaseTypeCompressor) -> None:
     before = data.dtype
     compressed = compress_func(data, typeset, compressor)
@@ -43,7 +43,7 @@ def _(data: pd.Series, typeset: VisionsTypeset, compressor: BaseTypeCompressor) 
     )
 
 
-@compress_report.register(pd.DataFrame) # type: ignore
+@compress_report.register(pd.DataFrame)  # type: ignore
 def _(
     data: pd.DataFrame, typeset: VisionsTypeset, compressor: BaseTypeCompressor
 ) -> None:
@@ -55,13 +55,17 @@ def _(
     # print(f"{data[col].name}: was {before} compressed {after} savings {compressor.savings(data[col], compressed[col])}")
 
 
-def savings(original_data: pdT, new_data: pdT, units="megabyte", deep=False,) -> Quantity:
+def savings(
+    original_data: pdT, new_data: pdT, units="megabyte", deep=False,
+) -> Quantity:
     original_size = storage_size(original_data, deep)
     new_size = storage_size(new_data, deep)
     return (original_size - new_size).to(units)
 
 
-def savings_report(original_data: pdT, new_data: pdT, units="megabyte", deep=False,) -> None:
+def savings_report(
+    original_data: pdT, new_data: pdT, units="megabyte", deep=False,
+) -> None:
     original_size = storage_size(original_data, deep).to(units)
     new_size = storage_size(new_data, deep).to(units)
     reduction = original_size - new_size

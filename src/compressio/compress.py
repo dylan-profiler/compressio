@@ -15,7 +15,7 @@ def compress_func(
     return compressor.compress(data, dtype)
 
 
-@compress_func.register(pd.Series) # type: ignore
+@compress_func.register(pd.Series)  # type: ignore
 def _(
     data: pd.Series, typeset: VisionsTypeset, compressor: BaseTypeCompressor
 ) -> pd.Series:
@@ -23,7 +23,7 @@ def _(
     return compressor.compress(data, dtype)
 
 
-@compress_func.register(pd.DataFrame) # type: ignore
+@compress_func.register(pd.DataFrame)  # type: ignore
 def _(
     data: pd.DataFrame, typeset: VisionsTypeset, compressor: BaseTypeCompressor
 ) -> pd.DataFrame:
