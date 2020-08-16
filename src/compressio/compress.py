@@ -3,8 +3,8 @@ from functools import singledispatch
 import pandas as pd
 from visions import StandardSet, VisionsTypeset
 
-from compressio.typing import pdT
 from compressio.type_compressor import BaseTypeCompressor, DefaultCompressor
+from compressio.typing import pdT
 
 
 @singledispatch

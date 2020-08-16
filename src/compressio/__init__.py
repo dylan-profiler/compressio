@@ -1,4 +1,5 @@
 from compressio.compress import Compress
+from compressio.compression_algorithms import type_compressions
 from compressio.diagnostics import (
     compress_report,
     savings,
@@ -7,7 +8,6 @@ from compressio.diagnostics import (
 )
 from compressio.type_compressor import BaseTypeCompressor, DefaultCompressor
 from compressio.typing import pdT
-from compressio.compression_algorithms import type_compressions
 
 __all__ = [
     "Compress",

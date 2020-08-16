@@ -2,13 +2,12 @@
 from functools import singledispatch
 
 import pandas as pd
+from pint import Quantity
 from visions.typesets import VisionsTypeset
-from compressio.type_compressor import BaseTypeCompressor
 
 from compressio.compress import compress_func
+from compressio.type_compressor import BaseTypeCompressor
 from compressio.typing import pdT
-
-from pint import Quantity
 
 
 @singledispatch

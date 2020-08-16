@@ -5,3 +5,5 @@ pytest>=5.2.0
 pytest-mypy
 pytest-black
 check-manifest>=0.41
+isort>=5.0.9
+black>=19.10b0

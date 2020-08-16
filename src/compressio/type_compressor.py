@@ -1,10 +1,3 @@
-from compressio.compression_algorithms import (
-    compress_complex,
-    compress_float,
-    compress_datetime,
-    compress_integer,
-    compress_object,
-)
 from typing import Type
 
 import pandas as pd
@@ -18,6 +11,14 @@ from visions import (
     Object,
     String,
     VisionsBaseType,
+)
+
+from compressio.compression_algorithms import (
+    compress_complex,
+    compress_datetime,
+    compress_float,
+    compress_integer,
+    compress_object,
 )
 
 

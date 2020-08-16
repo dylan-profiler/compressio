@@ -1,0 +1,10 @@
+  include *.txt
+  include LICENSE
+  include Makefile
+  include mypy.ini
+  recursive-include examples *.ipynb
+  recursive-include images *.jpeg
+  recursive-include images *.png
+  recursive-include images *.txt
+  recursive-include src *.typed
+  recursive-include tests *.py
