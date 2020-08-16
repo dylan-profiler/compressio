@@ -21,6 +21,21 @@ def get_compressed_type(
     return next(test_sequence)
 
 
+def compress_sparse(series: pd.Series, threshold=0.5) -> pd.Series:
+    number = len(series)
+
+    nan = number - series.count()
+    zero = (series == 0).sum()
+    if nan / number > threshold:
+        fill_value = np.nan
+    elif zero / number > threshold:
+        fill_value = 0
+    else:
+        return series
+
+    return series.astype(pd.SparseDtype(series.dtype, fill_value))
+
+
 def compress_float(series: pd.Series) -> pd.Series:
     """
     Compressing to half-precision floating-point format can degrade computational performance
