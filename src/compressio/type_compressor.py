@@ -1,4 +1,4 @@
-from compressario.compression_algorithms import (
+from compressio.compression_algorithms import (
     compress_complex,
     compress_float,
     compress_datetime,

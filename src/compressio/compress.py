@@ -1,6 +1,4 @@
 from functools import singledispatch
-from typing import Union
-
 
 import pandas as pd
 from visions import StandardSet, VisionsTypeset
