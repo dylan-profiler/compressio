@@ -17,8 +17,8 @@ with (source_root / "requirements_test.txt").open(encoding="utf8") as f:
 
 setup(
     name="compressio",
-    version="0.0.2",
-    url="https://github.com/ieaves/compressario",
+    version="0.0.4",
+    url="https://github.com/dylan-profiler/compressio",
     description="compressio",
     author="Ian Eaves, Simon Brugman",
     author_email="ian.k.eaves@gmail.com",
@@ -30,6 +30,7 @@ setup(
     tests_require=test_requirements,
     python_requires=">=3.6",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     zip_safe=False,
     classifiers=[
         "Programming Language :: Python :: 3",
