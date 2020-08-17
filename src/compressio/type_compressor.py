@@ -33,6 +33,8 @@ class BaseTypeCompressor:
 class DefaultCompressor(BaseTypeCompressor):
     def __init__(self, *args, **kwargs):
         compression_map = {
+            Boolean: lambda x: x,
+            Categorical: lambda x: x,
             Integer: compress_integer,
             Float: compress_float,
             Complex: compress_complex,
