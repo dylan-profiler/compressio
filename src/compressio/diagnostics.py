@@ -27,35 +27,43 @@ def _(data: pd.DataFrame, deep=False) -> Quantity:
 
 @singledispatch
 def compress_report(
-    data: pdT, typeset: VisionsTypeset, compressor: BaseTypeCompressor
+    data: pdT,
+    typeset: VisionsTypeset,
+    compressor: BaseTypeCompressor,
+    units: str = "megabytes",
 ) -> None:
     raise TypeError(f"Can't create a compression report of data type {type(data)}")
 
 
 @compress_report.register(pd.Series)  # type: ignore
-def _(data: pd.Series, typeset: VisionsTypeset, compressor: BaseTypeCompressor) -> None:
+def _(
+    data: pd.Series,
+    typeset: VisionsTypeset,
+    compressor: BaseTypeCompressor,
+    units: str = "megabytes",
+) -> None:
     before = data.dtype
     compressed = compress_func(data, typeset, compressor)
     after = compressed.dtype
-    print(
-        f"{data.name}: was {before} compressed {after} savings {compressor.savings(data, compressed)}"
-    )
+    if before != after:
+        print(
+            f'{data.name}: converting from {before} to {after} saves {savings(data, compressed, units)} (use `data[{data.name}].astype("{after}")`)'
+        )
 
 
 @compress_report.register(pd.DataFrame)  # type: ignore
 def _(
-    data: pd.DataFrame, typeset: VisionsTypeset, compressor: BaseTypeCompressor
+    data: pd.DataFrame,
+    typeset: VisionsTypeset,
+    compressor: BaseTypeCompressor,
+    units: str = "megabytes",
 ) -> None:
-    before = data.dtypes
-    compressed = compress_func(data, typeset, compressor)
-    after = compressed.dtypes
-
-    # for in zip(before, after):
-    # print(f"{data[col].name}: was {before} compressed {after} savings {compressor.savings(data[col], compressed[col])}")
+    for column in data.columns:
+        compress_report(data[column], typeset, compressor, units)
 
 
 def savings(
-    original_data: pdT, new_data: pdT, units="megabyte", deep=False,
+    original_data: pdT, new_data: pdT, units="megabyte", deep=False
 ) -> Quantity:
     original_size = storage_size(original_data, deep)
     new_size = storage_size(new_data, deep)
@@ -63,7 +71,7 @@ def savings(
 
 
 def savings_report(
-    original_data: pdT, new_data: pdT, units="megabyte", deep=False,
+    original_data: pdT, new_data: pdT, units="megabyte", deep=False
 ) -> None:
     original_size = storage_size(original_data, deep).to(units)
     new_size = storage_size(new_data, deep).to(units)
