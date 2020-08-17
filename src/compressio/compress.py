@@ -11,15 +11,17 @@ from compressio.typing import pdT
 def compress_func(
     data: pdT, typeset: VisionsTypeset, compressor: BaseTypeCompressor
 ) -> pdT:
-    dtype = typeset.detect_type(data)
-    return compressor.compress(data, dtype)
+    dtype = typeset.infer_type(data)
+    return compressor.compress(typeset.cast_to_inferred(data), dtype)
 
 
 @compress_func.register(pd.Series)  # type: ignore
 def _(
     data: pd.Series, typeset: VisionsTypeset, compressor: BaseTypeCompressor
 ) -> pd.Series:
-    dtype = typeset.detect_type(data)
+    dtype = typeset.infer_type(data)
+    data = typeset.cast_to_inferred(data)
+
     return compressor.compress(data, dtype)
 
 
@@ -27,15 +29,15 @@ def _(
 def _(
     data: pd.DataFrame, typeset: VisionsTypeset, compressor: BaseTypeCompressor
 ) -> pd.DataFrame:
-    dtypes = typeset.detect_type(data)
+    dtypes = typeset.infer_type(data)
     return pd.DataFrame(
-        {col: compressor.compress(data[col], dtypes[col]) for col in data.columns}
+        {col: compressor.compress(typeset.cast_to_inferred(data[col]), dtypes[col]) for col in data.columns}
     )
 
 
 class Compress:
     def __init__(
-        self, typeset: VisionsTypeset = None, compressor: BaseTypeCompressor = None,
+        self, typeset: VisionsTypeset = None, compressor: BaseTypeCompressor = None
     ) -> None:
         self.typeset = typeset if typeset is not None else StandardSet()
         self.compressor = compressor if compressor is not None else DefaultCompressor()
