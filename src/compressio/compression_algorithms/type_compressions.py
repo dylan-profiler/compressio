@@ -21,19 +21,31 @@ def get_compressed_type(
     return next(test_sequence)
 
 
-def compress_sparse(series: pd.Series, threshold=0.5) -> pd.Series:
+def compress_sparse(series: pd.Series) -> pd.Series:
     number = len(series)
+    n_nan = number - series.count()
+    n_zero = (series == 0).sum()
 
-    nan = number - series.count()
-    zero = (series == 0).sum()
-    if nan / number > threshold:
+    if n_nan > 0 and n_nan > n_zero:
         fill_value = np.nan
-    elif zero / number > threshold:
+    elif n_zero > 0:
         fill_value = 0
     else:
         return series
 
-    return series.astype(pd.SparseDtype(series.dtype, fill_value))
+    test_dtype = series.dtype
+
+    # Deal with category, nullable integers/boolean
+    # if not isinstance(test_dtype, type):
+    #     if isinstance(test_dtype, _IntegerDtype):
+    #         return series
+    #     test_dtype = type(test_dtype)
+
+    new_series = series.astype(pd.SparseDtype(test_dtype, fill_value))
+    if new_series.memory_usage() < series.memory_usage():
+        return new_series
+    else:
+        return series
 
 
 def compress_float(series: pd.Series) -> pd.Series:

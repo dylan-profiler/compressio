@@ -5,6 +5,7 @@ from compressio.compression_algorithms.type_compressions import (
     compress_float,
     compress_integer,
     compress_object,
+    compress_sparse,
 )
 
 __all__ = [
