@@ -1,17 +1,7 @@
 from typing import Type
 
 import pandas as pd
-from visions import (
-    Boolean,
-    Categorical,
-    Complex,
-    DateTime,
-    Float,
-    Integer,
-    Object,
-    String,
-    VisionsBaseType,
-)
+from visions import Complex, DateTime, Float, Integer, Object, String, VisionsBaseType
 
 from compressio.compression_algorithms import (
     compress_complex,
@@ -33,8 +23,6 @@ class BaseTypeCompressor:
 class DefaultCompressor(BaseTypeCompressor):
     def __init__(self, *args, **kwargs):
         compression_map = {
-            Boolean: lambda x: x,
-            Categorical: lambda x: x,
             Integer: compress_integer,
             Float: compress_float,
             Complex: compress_complex,
