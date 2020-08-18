@@ -1,17 +1,7 @@
 from typing import Type
 
 import pandas as pd
-from visions import (
-    Boolean,
-    Categorical,
-    Complex,
-    DateTime,
-    Float,
-    Integer,
-    Object,
-    String,
-    VisionsBaseType,
-)
+from visions import Complex, DateTime, Float, Integer, Object, String, VisionsBaseType
 
 from compressio.compression_algorithms import (
     compress_complex,
