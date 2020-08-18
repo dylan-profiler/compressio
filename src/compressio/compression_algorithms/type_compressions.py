@@ -78,7 +78,7 @@ def compress_object(series: pd.Series) -> pd.Series:
         new_series = series.astype("category")
         if new_series.memory_usage() < series.memory_usage():
             return new_series
-    except:
+    except:  # noqa
         pass
     return series
 
@@ -88,7 +88,7 @@ def compress_datetime(series: pd.Series) -> pd.Series:
         new_series = series.astype("category")
         if new_series.memory_usage() < series.memory_usage():
             return new_series
-    except:
+    except:  # noqa
         pass
     return series
 

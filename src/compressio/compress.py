@@ -35,7 +35,7 @@ def _(
 
 class Compress:
     def __init__(
-        self, typeset: VisionsTypeset = None, compressor: BaseTypeCompressor = None,
+        self, typeset: VisionsTypeset = None, compressor: BaseTypeCompressor = None
     ) -> None:
         self.typeset = typeset if typeset is not None else StandardSet()
         self.compressor = compressor if compressor is not None else DefaultCompressor()
