@@ -1,6 +1,6 @@
 ![Compressio Logo](images/logo/compressio-logos_transparent_banner.png)
 
-# Compressario
+# Compressio
 
 Lossless in-memory compression of pandas DataFrames and Series powered by the [visions](https://github.com/dylan-profiler/visions) type system. Up to 10x less RAM needed for the same data. 
 

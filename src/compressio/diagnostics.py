@@ -46,16 +46,12 @@ def _(data: pd.Series, typeset: VisionsTypeset, compressor: BaseTypeCompressor) 
 def _(
     data: pd.DataFrame, typeset: VisionsTypeset, compressor: BaseTypeCompressor
 ) -> None:
-    before = data.dtypes
-    compressed = compress_func(data, typeset, compressor)
-    after = compressed.dtypes
-
-    # for in zip(before, after):
-    # print(f"{data[col].name}: was {before} compressed {after} savings {compressor.savings(data[col], compressed[col])}")
+    for col in data.columns:
+        compress_report(data[col], typeset, compressor)
 
 
 def savings(
-    original_data: pdT, new_data: pdT, units="megabyte", deep=False,
+    original_data: pdT, new_data: pdT, units="megabyte", deep=False
 ) -> Quantity:
     original_size = storage_size(original_data, deep)
     new_size = storage_size(new_data, deep)
@@ -63,7 +59,7 @@ def savings(
 
 
 def savings_report(
-    original_data: pdT, new_data: pdT, units="megabyte", deep=False,
+    original_data: pdT, new_data: pdT, units="megabyte", deep=False
 ) -> None:
     original_size = storage_size(original_data, deep).to(units)
     new_size = storage_size(new_data, deep).to(units)

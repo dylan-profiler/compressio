@@ -25,6 +25,15 @@ def get_compressed_type(
 
 
 def compress_float(series: pd.Series) -> pd.Series:
+    """
+    Compressing to half-precision floating-point format can degrade computational performance
+    CPUs often do not have native support for 16-bit floats and simulate the data type.
+    https://en.wikipedia.org/wiki/Half-precision_floating-point_format
+    https://stackoverflow.com/a/49997863/470433
+    https://stackoverflow.com/a/15341193/470433
+    :param series:
+    :return:
+    """
     minv, maxv = series.min(), series.max()
     tester = type_tester(minv, maxv, np.finfo)
     test_types = [np.float16, np.float32, np.float64]
@@ -78,7 +87,7 @@ def compress_object(series: pd.Series) -> pd.Series:
         new_series = series.astype("category")
         if new_series.memory_usage() < series.memory_usage():
             return new_series
-    except:
+    except:  # noqa
         pass
     return series
 
@@ -88,7 +97,7 @@ def compress_datetime(series: pd.Series) -> pd.Series:
         new_series = series.astype("category")
         if new_series.memory_usage() < series.memory_usage():
             return new_series
-    except:
+    except:  # noqa
         pass
     return series
 
