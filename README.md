@@ -120,10 +120,10 @@ Pandas allows for multiple ways of storing strings: as string objects or as `pan
 
 How you store strings in pandas can significantly impact the RAM required. 
 
-[![Memory usage of string representations in pandas](images/str-type-1.1.0.png)](examples/notebooks/pandas+string+type+analysis.ipynb)
+[![Memory usage of string representations in pandas](images/str-type-1.1.0.png)](examples/notebooks/pandas%20string%20type%20analysis.ipynb)
 
 The key insights from this analysis are:
 - The Category is more memory efficient when values are recurring and the String representation the percentage of distinct values. 
 - The size of the Series is _not_ decisive for the string representation choice.
 
-You can find the full analysis [here](examples/notebooks/pandas+string+type+analysis.ipynb).
+You can find the full analysis [here](examples/notebooks/pandas%20string%20type%20analysis.ipynb).
