@@ -89,7 +89,7 @@ When your data is not randomly distributed, it can be compressed ([Theory](https
 Low cardinality data can often be more efficiently stored using [sparse data structures](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.arrays.SparseArray.html#pandas.arrays.SparseArray), which are provided by pandas by default. 
 These structures offer efficiency by storing the predominant values only once and instead keeping indices for all other values.
 
-Data structure optimization is not limited to sparse arrays but instead include numerous domain specific opportunities such as[run-length encoding (RLE)](https://www.dlsi.ua.es/~carrasco/papers/RLE%20-%20Run%20length%20Encoding.html) which can be applied to compress sequential data. 
+Data structure optimization is not limited to sparse arrays but instead include numerous domain specific opportunities such as [run-length encoding (RLE)](https://www.dlsi.ua.es/~carrasco/papers/RLE%20-%20Run%20length%20Encoding.html) which can be applied to compress sequential data. 
 We note that a pandas-specific third-party implementation is currently under development: [RLEArray](https://github.com/JDASoftwareGroup/rle-array).
 
 ## Usage
