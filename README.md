@@ -110,9 +110,9 @@ git clone https://github.com/dylan-profiler/compressio.git
 
 ### Examples
 
-![Compressing DataFrames](images/compressio.png)
+[![Code example](images/notebook-example.png)](examples/notebooks/Compressio.ipynb).
 
-There are a collection of example notebooks to play with in the [examples directory](examples/notebooks/) with a quick start notebook available[here](examples/notebooks/Compressio.ipynb).
+There is a collection of example notebooks to play with in the [examples directory](examples/notebooks/) with a quick start notebook available[here](examples/notebooks/Compressio.ipynb).
 
 ## Optimizing strings in pandas
 
