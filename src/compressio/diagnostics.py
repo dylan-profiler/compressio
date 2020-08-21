@@ -27,27 +27,39 @@ def _(data: pd.DataFrame, deep=False) -> Quantity:
 
 @singledispatch
 def compress_report(
-    data: pdT, typeset: VisionsTypeset, compressor: BaseTypeCompressor
+    data: pdT,
+    typeset: VisionsTypeset,
+    compressor: BaseTypeCompressor,
+    units: str = "megabytes",
 ) -> None:
     raise TypeError(f"Can't create a compression report of data type {type(data)}")
 
 
 @compress_report.register(pd.Series)  # type: ignore
-def _(data: pd.Series, typeset: VisionsTypeset, compressor: BaseTypeCompressor) -> None:
+def _(
+    data: pd.Series,
+    typeset: VisionsTypeset,
+    compressor: BaseTypeCompressor,
+    units: str = "megabytes",
+) -> None:
     before = data.dtype
     compressed = compress_func(data, typeset, compressor)
     after = compressed.dtype
-    print(
-        f"{data.name}: was {before} compressed {after} savings {compressor.savings(data, compressed)}"
-    )
+    if before != after:
+        print(
+            f'{data.name}: converting from {before} to {after} saves {savings(data, compressed, units)} (use `data[{data.name}].astype("{after}")`)'
+        )
 
 
 @compress_report.register(pd.DataFrame)  # type: ignore
 def _(
-    data: pd.DataFrame, typeset: VisionsTypeset, compressor: BaseTypeCompressor
+    data: pd.DataFrame,
+    typeset: VisionsTypeset,
+    compressor: BaseTypeCompressor,
+    units: str = "megabytes",
 ) -> None:
-    for col in data.columns:
-        compress_report(data[col], typeset, compressor)
+    for column in data.columns:
+        compress_report(data[column], typeset, compressor, units)
 
 
 def savings(
