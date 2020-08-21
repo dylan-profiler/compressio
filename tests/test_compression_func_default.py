@@ -11,6 +11,7 @@ from compressio.compress import compress_func
 
 if hasattr(visions, "BoolDtype"):
     from visions import BoolDtype
+
     bool_type = BoolDtype
 elif hasattr(pd, "BooleanDtype"):
     bool_type = pd.BooleanDtype
@@ -26,7 +27,7 @@ else:
         (
             pd.Series([True, False, None, None, None, None, True, False] * 1000),
             np.object,
-            bool_type
+            bool_type,
         ),
     ],
 )

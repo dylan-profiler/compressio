@@ -1,30 +1,43 @@
 ![Compressio Logo](images/logo/compressio-logos_transparent_banner.png)
 
-# Compressio
+# Compress*io*
 
-Lossless in-memory compression of pandas DataFrames and Series powered by the [visions](https://github.com/dylan-profiler/visions) type system. Up to 10x less RAM needed for the same data. 
+> Compressio provides lossless in-memory compression of pandas DataFrames and Series powered by the [visions](https://github.com/dylan-profiler/visions) type system. Use up to 10x less RAM with the same data!
 
-Compressio automates minimizing the amount of memory required for your data (and the amount of work you have to do to achieve that!). 
+Getting started is as easy as
 
-The general framework is not limited to specific compression strategies.
-Customizing compressio is as simple as providing a mapping of compression functions for the types in your dataset.
+```python
+from compressio import Compress
 
-Yet compressio ships with powerful compression algorithms that can help optimize your memory usage to up til 10x. 
-These algorithms can be subdivided into these optimization strategies:
+compress = Compress()
+compressed_data = compress.it(data)
 
-1. Use smaller dtypes when the data can do with lower precision without losing information
-2. Consider (more efficient) data representations 
-3. Compress the data using more efficient data structures
+```
 
-(2. is where things get messy without visions)
+
+## The Framework
+
+Compressio is a general framework for automated data compression and representation management not limited to any specific compression algorithm or implementation.
+You have complete control, define your own types, write your own compression algorithms, or get started with the large library of types provided by [visions](https://dylan-profiler.github.io/visions/visions/api/types.html) and the suite of powerful algorithms included in compressio by default.
+
+
+These algorithms can be subdivided around three basic optimization strategies:
+
+1. Prefer smaller dtypes where possible without loss of information
+2. Consider (more efficient) data representations*
+3. Compress data using more efficient data structures
+
+\* this is where things get messy without visions
 
 ### 1. Smaller dtypes
 
-Pandas uses numpy arrays to store data, where the `dtype` specifies the array's kind of data.
-For instance numbers might be stored as 64-bit integers (`int64`), 8-bit unsigned integers (`uint8`) or a 32-bit floating point number (`float32`).
-Read the numpy type [overview](https://numpy.org/doc/stable/user/basics.types.html) for details.
+Under the hood, pandas leverages numpy arrays to store data.
+Each numpy array has an associated `dtype` specifying a physical, on disk, representation of the data.
+For instance, a sequence of integers might be stored as 64-bit integers (`int64`), 8-bit unsigned integers (`uint8`) or even 32-bit floating point number (`float32`).
+An overview of the numpy type system can be found [here](https://numpy.org/doc/stable/user/basics.types.html).
 
-Different types require different amounts of memory; a 8-bit integer requires only 1/8th the memory of what a 64-bit integer would need.
+These type differences have numerous computational implications, for example, where an 8 bit integer can represent numbers between 0 and 255, the range of a 64 bit integer is  between -9,223,372,036,854,775,808 and 9,223,372,036,854,775,807 at the cost of an 8x larger memory footprint.
+There can also be computational performance implications for different sizes.
 
 ```python
 import numpy as np
@@ -44,9 +57,11 @@ As you can see, the 8-bit integer array decreases the memory usage by 87.5%.
 
 **This feature is in progress**
 
-Compressio uses visions' to infer the semantic type of the data and minimized the memory needed by changing the computer representation while keeping the semantic type constant.
+Compressio uses visions to infer the semantic type of data and coerce it into alternative computational representations which minimize memory impact while maintaining it's semantic meaning.
 
-For instance visions can infer and cast to the following series automatically, yielding a 4x memory improvement: 
+
+For instance, although pandas can use the generic object dtype to store boolean sequences, it comes at the cost of a 4x memory footprint.
+Visions can automatically handle these circumstances to find an appropriate representation for your data.
 
 ```python
 >>>> import pandas as pd
@@ -71,34 +86,33 @@ Without additional instructions, pandas represents your data as *dense* arrays. 
 
 When your data is not randomly distributed, it can be compressed ([Theory](https://simonbrugman.nl/2020/04/02/searching-for-neural-networks-with-low-kolmogorov-complexity.html#kolmogorov-complexity)).
 
-Data that consists mostly of a single value can be more efficiently stores in [sparse data structures](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.arrays.SparseArray.html#pandas.arrays.SparseArray), which are provided by pandas by default. 
-The sparse data structure is more efficient in this case by storing the predominant value only once and instead keeping indices for all other values.
+Low cardinality data can often be more efficiently stored using [sparse data structures](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.arrays.SparseArray.html#pandas.arrays.SparseArray), which are provided by pandas by default. 
+These structures offer efficiency by storing the predominant values only once and instead keeping indices for all other values.
 
-Optimization of data structures is not limited to sparse arrays. 
-For example [run-length encoding (RLE)](https://www.dlsi.ua.es/~carrasco/papers/RLE%20-%20Run%20length%20Encoding.html) can be used to compress sequential data. 
-We take note that a pandas-specific third-party implementation is under development: [RLEArray](https://github.com/JDASoftwareGroup/rle-array).
+Data structure optimization is not limited to sparse arrays but instead include numerous domain specific opportunities such as[run-length encoding (RLE)](https://www.dlsi.ua.es/~carrasco/papers/RLE%20-%20Run%20length%20Encoding.html) which can be applied to compress sequential data. 
+We note that a pandas-specific third-party implementation is currently under development: [RLEArray](https://github.com/JDASoftwareGroup/rle-array).
 
 ## Usage
 
 ### Installation
 
-You can install compressio through pip:
+You can easily install compressio with pip:
+
 ```
 pip install compressio
 ```
 
-Alternatively, you can clone this github repository:
+Or, alternatively, install from source.
 
 ```
 git clone https://github.com/dylan-profiler/compressio.git
 ```
 
-### Compressing DataFrames
+### Examples
 
 ![Compressing DataFrames](images/compressio.png)
 
-The notebook [here](examples/notebooks/Compressio.ipynb) contains an example to get you started.
-Several other Jupyter notebooks are available in the [examples directory](examples/notebooks/). 
+There are a collection of example notebooks to play with in the [examples directory](examples/notebooks/) with a quick start notebook available[here](examples/notebooks/Compressio.ipynb).
 
 ## Optimizing strings in pandas
 
