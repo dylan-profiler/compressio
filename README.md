@@ -55,7 +55,7 @@ As you can see, the 8-bit integer array decreases the memory usage by 87.5%.
 
 ### 2. Appropriate machine representation
 
-**This feature is in progress**
+**🚧 This feature is in progress**
 
 Compressio uses visions to infer the semantic type of data and coerce it into alternative computational representations which minimize memory impact while maintaining it's semantic meaning.
 
@@ -80,7 +80,7 @@ Further background information is available in the [visions documentation](https
 
 ### 3. Efficient data structures
 
-**This feature is in progress**
+**🚧 This feature is in progress**
 
 Without additional instructions, pandas represents your data as *dense* arrays. This is a good all-round choice. 
 
@@ -112,7 +112,7 @@ git clone https://github.com/dylan-profiler/compressio.git
 
 [![Code example](images/notebook-example.png)](examples/notebooks/Compressio.ipynb).
 
-There is a collection of example notebooks to play with in the [examples directory](examples/notebooks/) with a quick start notebook available[here](examples/notebooks/Compressio.ipynb).
+There is a collection of example notebooks to play with in the [examples directory](examples/notebooks/) with a quick start notebook available [here](examples/notebooks/Compressio.ipynb).
 
 ## Optimizing strings in pandas
 
@@ -120,10 +120,10 @@ Pandas allows for multiple ways of storing strings: as string objects or as `pan
 
 How you store strings in pandas can significantly impact the RAM required. 
 
-![Memory usage of string representations in pandas](images/str-type-1.1.0.png)
+[![Memory usage of string representations in pandas](images/str-type-1.1.0.png)](examples/notebooks/pandas string type analysis.ipynb)
 
 The key insights from this analysis are:
 - The Category is more memory efficient when values are recurring and the String representation the percentage of distinct values. 
 - The size of the Series is _not_ decisive for the string representation choice.
 
-You can find the full analysis [here](blob/master/examples/notebooks/Compressio.ipynb).
+You can find the full analysis [here](examples/notebooks/pandas string type analysis.ipynb).
