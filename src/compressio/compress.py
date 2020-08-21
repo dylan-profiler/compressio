@@ -17,14 +17,20 @@ def get_data_and_dtype(data: pdT, typeset: VisionsTypeset, with_inference: bool)
 
 @singledispatch
 def compress_func(
-    data: pdT, typeset: VisionsTypeset, compressor: BaseTypeCompressor, with_inference: bool
+    data: pdT,
+    typeset: VisionsTypeset,
+    compressor: BaseTypeCompressor,
+    with_inference: bool,
 ) -> pdT:
     raise Exception(f"Unsupported datatype {type(data)}")
 
 
 @compress_func.register(pd.Series)  # type: ignore
 def _(
-    data: pd.Series, typeset: VisionsTypeset, compressor: BaseTypeCompressor, with_inference: bool
+    data: pd.Series,
+    typeset: VisionsTypeset,
+    compressor: BaseTypeCompressor,
+    with_inference: bool,
 ) -> pd.Series:
     data, dtype = get_data_and_dtype(data, typeset, with_inference)
     return compressor.compress(data, dtype)
@@ -32,21 +38,32 @@ def _(
 
 @compress_func.register(pd.DataFrame)  # type: ignore
 def _(
-    data: pd.DataFrame, typeset: VisionsTypeset, compressor: BaseTypeCompressor, with_inference: bool
+    data: pd.DataFrame,
+    typeset: VisionsTypeset,
+    compressor: BaseTypeCompressor,
+    with_inference: bool,
 ) -> pd.DataFrame:
     return pd.DataFrame(
-        {col: compress_func(data[col], typeset, compressor, with_inference) for col in data.columns}
+        {
+            col: compress_func(data[col], typeset, compressor, with_inference)
+            for col in data.columns
+        }
     )
 
 
 class Compress:
     def __init__(
-        self, typeset: VisionsTypeset = None, compressor: BaseTypeCompressor = None, with_type_inference: bool = False
+        self,
+        typeset: VisionsTypeset = None,
+        compressor: BaseTypeCompressor = None,
+        with_type_inference: bool = False,
     ) -> None:
         self.typeset = typeset if typeset is not None else StandardSet()
         self.compressor = compressor if compressor is not None else DefaultCompressor()
         self.with_type_inference = with_type_inference
 
     def it(self, data: pdT) -> pdT:
-        data = compress_func(data, self.typeset, self.compressor, self.with_type_inference)
+        data = compress_func(
+            data, self.typeset, self.compressor, self.with_type_inference
+        )
         return data
