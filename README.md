@@ -55,8 +55,6 @@ As you can see, the 8-bit integer array decreases the memory usage by 87.5%.
 
 ### 2. Appropriate machine representation
 
-**🚧 This feature is in progress**
-
 Compressio uses visions to infer the semantic type of data and coerce it into alternative computational representations which minimize memory impact while maintaining it's semantic meaning.
 
 
@@ -127,3 +125,12 @@ The key insights from this analysis are:
 - The size of the Series is _not_ decisive for the string representation choice.
 
 You can find the full analysis [here](examples/notebooks/pandas%20string%20type%20analysis.ipynb).
+
+## Gotcha's
+Compression has some obvious limitations. 
+- Overflow: dropping precision can lead to overflow. 
+(TODO: Mitigate by specifying bandwidth)
+- Compatibility: we cannot expect all libs to be compatible with Sparse, RLE
+    for example observed must be set to True with spars: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
+Another example of that [here](
+https://pythonspeed.com/articles/numpy-memory-footprint/#when-these-strategies-wont-work)
