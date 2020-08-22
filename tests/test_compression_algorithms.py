@@ -38,13 +38,48 @@ from compressio.compression_algorithms import (
             np.float64,
             np.float16,
         ),
-        # TODO: better be int8!
-        (pd.Series([0, 1, 2, 3], dtype=np.int64), compress_integer, np.int64, np.uint8),
+        (pd.Series([0, 1, 2, 3], dtype=np.int64), compress_integer, np.int64, np.int8),
+        (
+            pd.Series([np.iinfo(np.int8).max + 1], dtype=np.int64),
+            compress_integer,
+            np.int64,
+            np.uint8,
+        ),
+        (
+            pd.Series([np.iinfo(np.uint8).max + 1], dtype=np.int64),
+            compress_integer,
+            np.int64,
+            np.int16,
+        ),
+        (
+            pd.Series([np.iinfo(np.int16).max + 1], dtype=np.int64),
+            compress_integer,
+            np.int64,
+            np.uint16,
+        ),
+        (
+            pd.Series([np.iinfo(np.uint16).max + 1], dtype=np.int64),
+            compress_integer,
+            np.int64,
+            np.int32,
+        ),
+        (
+            pd.Series([np.iinfo(np.int32).max + 1], dtype=np.int64),
+            compress_integer,
+            np.int64,
+            np.uint32,
+        ),
+        (
+            pd.Series([np.iinfo(np.uint32).max + 1], dtype=np.int64),
+            compress_integer,
+            np.int64,
+            np.int64,
+        ),
         (
             pd.Series([0, 1, 2, 3, 300], dtype=np.int64),
             compress_integer,
             np.int64,
-            np.uint16,
+            np.int16,
         ),
         (
             pd.Series([-1, 0, 1, 2, 3, 300], dtype=np.int64),
