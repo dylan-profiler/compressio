@@ -127,10 +127,13 @@ The key insights from this analysis are:
 You can find the full analysis [here](examples/notebooks/pandas%20string%20type%20analysis.ipynb).
 
 ## Gotcha's
-Compression has some obvious limitations. 
-- Overflow: dropping precision can lead to overflow. 
-(TODO: Mitigate by specifying bandwidth)
-- Compatibility: we cannot expect all libs to be compatible with Sparse, RLE
-    for example observed must be set to True with spars: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
-Another example of that [here](
-https://pythonspeed.com/articles/numpy-memory-footprint/#when-these-strategies-wont-work)
+
+Compressing DataFrames can be helpful in many situations, but not all.
+Be mindful of how to apply it in the following cases:
+
+- _Overflow_: compression by dropping precision can lead to overflows if the array is manipulated afterwards. 
+This can be an issue for instance for [numpy integers](https://mortada.net/can-integer-operations-overflow-in-python.html). In case this is a problem for your application, you can explicitly choose a precision.
+
+- _Compatibility_: other libraries may make different decisions to how to handle your compressed data.
+One example where code needs to be adjusted to the compressed data is when the sparse data structure is used in combination with [`.groupby`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html). (`observed` must be set to `True`).
+This [article](https://pythonspeed.com/articles/numpy-memory-footprint/#when-these-strategies-wont-work) provides another example of scikit-image, which for some functions immediately converts a given array to a float64 dtype.
