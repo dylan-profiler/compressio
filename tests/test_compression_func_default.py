@@ -22,8 +22,12 @@ else:
 @pytest.mark.parametrize(
     "series,before,expected",
     [
-        (pd.Series([10.0, 100.0, 1000.0], dtype=np.float64), np.float64, np.uint16),
-        (pd.Series([np.nan, 1], dtype=np.float64), np.float64, pd.UInt8Dtype),
+        (
+            pd.Series([10.0, 100.0, np.iinfo(np.int16).max * 1.0], dtype=np.float64),
+            np.float64,
+            np.int16,
+        ),
+        (pd.Series([np.nan, 1], dtype=np.float64), np.float64, pd.Int8Dtype),
         (
             pd.Series([True, False, None, None, None, None, True, False] * 1000),
             np.object,
@@ -34,7 +38,10 @@ else:
 def test_compress_series(series, before, expected):
     assert series.dtype == before
     compressed_series = compress_func(
-        series, typeset=StandardSet(), compressor=DefaultCompressor()
+        series,
+        typeset=StandardSet(),
+        compressor=DefaultCompressor(),
+        with_inference=True,
     )
     assert compressed_series.dtype == expected or isinstance(
         compressed_series.dtype, expected

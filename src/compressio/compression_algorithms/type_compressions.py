@@ -17,11 +17,8 @@ def type_tester(
 def get_compressed_type(
     type_options: Iterable[Type[np.dtype]], tester: Callable
 ) -> Type[np.dtype]:
-    for test_type in type_options:
-        if tester(test_type):
-            break
-
-    return test_type
+    test_sequence = (dtype for dtype in type_options if tester(dtype))
+    return next(test_sequence)
 
 
 def compress_float(series: pd.Series) -> pd.Series:
@@ -46,16 +43,22 @@ def compress_integer(series: pd.Series) -> pd.Series:
     minv, maxv = series.min(), series.max()
     tester = type_tester(minv, maxv, np.iinfo)
 
-    if minv >= 0:
-        test_types = [np.uint8, np.uint16, np.uint32, np.uint64]
-    else:
-        test_types = [np.int8, np.int16, np.int32, np.int64]
+    test_types = [
+        np.int8,
+        np.uint8,
+        np.int16,
+        np.uint16,
+        np.int32,
+        np.uint32,
+        np.int64,
+        np.uint64,
+    ]
 
     compressed_type = get_compressed_type(test_types, tester)
 
     if series.hasnans:
         name = np.dtype(compressed_type).name
-        if minv >= 0:
+        if np.iinfo(compressed_type).min >= 0:
             compressed_type = name[0:2].upper() + name[2:]
         else:
             compressed_type = name.capitalize()
