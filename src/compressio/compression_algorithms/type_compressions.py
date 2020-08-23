@@ -36,12 +36,23 @@ def compress_sparse(series: pd.Series) -> pd.Series:
     test_dtype = series.dtype
 
     # Deal with category, nullable integers/boolean
-    # if not isinstance(test_dtype, type):
-    #     if isinstance(test_dtype, _IntegerDtype):
-    #         return series
-    #     test_dtype = type(test_dtype)
+    if not isinstance(test_dtype, type):
+        from pandas.core.arrays.boolean import BooleanDtype
+        from pandas.core.arrays.integer import _IntegerDtype
+        if isinstance(test_dtype, (_IntegerDtype, )):
+            return series
+        test_dtype = type(test_dtype)
 
-    new_series = series.astype(pd.SparseDtype(test_dtype, fill_value))
+        if test_dtype == BooleanDtype:
+            test_dtype = bool
+            fill_value = pd.NA
+        from pandas import CategoricalDtype
+
+    if test_dtype == CategoricalDtype:
+        new_series = series.astype(pd.SparseDtype(test_dtype, fill_value))
+    else:
+        new_series = pd.Series(pd.arrays.SparseArray(series, dtype=test_dtype, fill_value=fill_value))
+
     if new_series.memory_usage() < series.memory_usage():
         return new_series
     else:
