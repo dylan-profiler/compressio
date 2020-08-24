@@ -1,8 +1,17 @@
-from typing import Type
 from functools import singledispatch
+from typing import Type
 
 import pandas as pd
-from visions import Complex, DateTime, Float, Integer, Object, String, VisionsBaseType, Boolean
+from visions import (
+    Boolean,
+    Complex,
+    DateTime,
+    Float,
+    Integer,
+    Object,
+    String,
+    VisionsBaseType,
+)
 
 from compressio.compression_algorithms import (
     compress_complex,
@@ -36,7 +45,6 @@ class BaseTypeCompressor:
 
     def compress(self, series: pd.Series, dtype: Type[VisionsBaseType]) -> pd.Series:
         compression_func = parse_func(self.compression_map.get(dtype, lambda x: x))
-
         return compression_func(series)
 
 

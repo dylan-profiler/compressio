@@ -2,6 +2,7 @@ from typing import Callable, Iterable, Type, Union
 
 import numpy as np
 import pandas as pd
+from pandas import CategoricalDtype
 
 
 def type_tester(
@@ -23,36 +24,26 @@ def get_compressed_type(
 
 def compress_sparse(series: pd.Series) -> pd.Series:
     number = len(series)
-    n_nan = number - series.count()
-    n_zero = (series == 0).sum()
+    missing_count = number - series.count()
 
-    if n_nan > 0 and n_nan > n_zero:
+    if missing_count > 0:
         fill_value = np.nan
-    elif n_zero > 0:
-        fill_value = 0
     else:
         return series
 
     test_dtype = series.dtype
 
-    # Deal with category, nullable integers/boolean
-    if not isinstance(test_dtype, type):
-        from pandas.core.arrays.boolean import BooleanDtype
-        from pandas.core.arrays.integer import _IntegerDtype
-        if isinstance(test_dtype, (_IntegerDtype, )):
-            return series
-        test_dtype = type(test_dtype)
-
-        if test_dtype == BooleanDtype:
-            test_dtype = bool
+    # pandas dtypes
+    if pd.api.types.is_extension_array_dtype(test_dtype):
+        if test_dtype != CategoricalDtype():
+            test_dtype = test_dtype.numpy_dtype
             fill_value = pd.NA
-        from pandas import CategoricalDtype
+        else:
+            test_dtype = np.object
 
-    if test_dtype == CategoricalDtype:
-        new_series = series.astype(pd.SparseDtype(test_dtype, fill_value))
-    else:
-        new_series = pd.Series(pd.arrays.SparseArray(series, dtype=test_dtype, fill_value=fill_value))
-
+    new_series = pd.Series(
+        pd.arrays.SparseArray(series, dtype=test_dtype, fill_value=fill_value)
+    )
     if new_series.memory_usage() < series.memory_usage():
         return new_series
     else:
