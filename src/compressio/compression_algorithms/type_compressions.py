@@ -23,14 +23,16 @@ def get_compressed_type(
 
 
 def compress_sparse(series: pd.Series) -> pd.Series:
-    number = len(series)
-    missing_count = number - series.count()
+    """Compresses the data by using the SparseArray data structure for missing values/nans
 
-    if missing_count > 0:
-        fill_value = np.nan
-    else:
+    :param series: series to compress
+    :return: the (compressed) series
+    """
+    if not series.hasnans:
         return series
 
+    # numpy dtypes
+    fill_value = np.nan
     test_dtype = series.dtype
 
     # pandas dtypes

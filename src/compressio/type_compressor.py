@@ -1,5 +1,5 @@
 from functools import singledispatch
-from typing import Type
+from typing import Type, Union
 
 import pandas as pd
 from visions import (
@@ -29,13 +29,14 @@ def parse_func(f):
     raise NotImplemented
 
 
-@parse_func.register
+@parse_func.register(object)
 def _(f: object):
     return f
 
 
-@parse_func.register
-def _(f: list):
+@parse_func.register(list)
+@parse_func.register(tuple)
+def _(f: Union[list, tuple]):
     return compose(f)
 
 
