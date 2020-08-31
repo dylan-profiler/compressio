@@ -2,6 +2,9 @@
   include LICENSE
   include Makefile
   include mypy.ini
+  include .pre-commit-config.yaml
+  include .flake8
+  include .isort.cfg
   recursive-include examples *.ipynb
   recursive-include images *.jpeg
   recursive-include images *.png
