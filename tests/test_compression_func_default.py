@@ -5,9 +5,8 @@ import visions
 from pandas._testing import assert_series_equal
 from visions import StandardSet
 
-from compressio.type_compressor import DefaultCompressor
 from compressio.compress import compress_func
-
+from compressio.type_compressor import DefaultCompressor
 
 if hasattr(visions, "BoolDtype"):
     from visions import BoolDtype

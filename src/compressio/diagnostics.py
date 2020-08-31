@@ -30,6 +30,7 @@ def compress_report(
     data: pdT,
     typeset: VisionsTypeset,
     compressor: BaseTypeCompressor,
+    with_inference: bool,
     units: str = "megabytes",
 ) -> None:
     raise TypeError(f"Can't create a compression report of data type {type(data)}")
@@ -40,12 +41,13 @@ def _(
     data: pd.Series,
     typeset: VisionsTypeset,
     compressor: BaseTypeCompressor,
+    with_inference: bool,
     units: str = "megabytes",
 ) -> None:
     before = data.dtype
-    compressed = compress_func(data, typeset, compressor)
+    compressed = compress_func(data, typeset, compressor, with_inference)
     after = compressed.dtype
-    if before != after:
+    if str(before) != str(after):
         print(
             f'{data.name}: converting from {before} to {after} saves {savings(data, compressed, units)} (use `data[{data.name}].astype("{after}")`)'
         )
@@ -56,10 +58,11 @@ def _(
     data: pd.DataFrame,
     typeset: VisionsTypeset,
     compressor: BaseTypeCompressor,
+    with_inference: bool,
     units: str = "megabytes",
 ) -> None:
     for column in data.columns:
-        compress_report(data[column], typeset, compressor, units)
+        compress_report(data[column], typeset, compressor, with_inference, units)
 
 
 def savings(

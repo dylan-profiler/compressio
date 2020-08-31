@@ -2,6 +2,7 @@ from typing import Callable, Iterable, Type, Union
 
 import numpy as np
 import pandas as pd
+from pandas import CategoricalDtype
 
 
 def type_tester(
@@ -19,6 +20,36 @@ def get_compressed_type(
 ) -> Type[np.dtype]:
     test_sequence = (dtype for dtype in type_options if tester(dtype))
     return next(test_sequence)
+
+
+def compress_sparse(series: pd.Series) -> pd.Series:
+    """Compresses the data by using the SparseArray data structure for missing values/nans
+
+    :param series: series to compress
+    :return: the (compressed) series
+    """
+    if not series.hasnans:
+        return series
+
+    # numpy dtypes
+    fill_value = np.nan
+    test_dtype = series.dtype
+
+    # pandas dtypes
+    if pd.api.types.is_extension_array_dtype(test_dtype):
+        if test_dtype != CategoricalDtype():
+            test_dtype = test_dtype.numpy_dtype
+            fill_value = pd.NA
+        else:
+            test_dtype = np.object
+
+    new_series = pd.Series(
+        pd.arrays.SparseArray(series, dtype=test_dtype, fill_value=fill_value)
+    )
+    if new_series.memory_usage() < series.memory_usage():
+        return new_series
+    else:
+        return series
 
 
 def compress_float(series: pd.Series) -> pd.Series:

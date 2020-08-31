@@ -6,7 +6,11 @@ from compressio.diagnostics import (
     savings_report,
     storage_size,
 )
-from compressio.type_compressor import BaseTypeCompressor, DefaultCompressor
+from compressio.type_compressor import (
+    BaseTypeCompressor,
+    DefaultCompressor,
+    SparseCompressor,
+)
 
 __all__ = [
     "Compress",
@@ -16,5 +20,6 @@ __all__ = [
     "compress_report",
     "BaseTypeCompressor",
     "DefaultCompressor",
+    "SparseCompressor",
     "type_compressions",
 ]

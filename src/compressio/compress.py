@@ -2,7 +2,7 @@ from functools import singledispatch
 
 import pandas as pd
 from visions import StandardSet, VisionsTypeset
-from visions.typesets.typeset import traverse_graph, get_type_from_path
+from visions.typesets.typeset import get_type_from_path, traverse_graph
 
 from compressio.type_compressor import BaseTypeCompressor, DefaultCompressor
 from compressio.typing import pdT
