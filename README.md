@@ -55,8 +55,6 @@ As you can see, the 8-bit integer array decreases the memory usage by 87.5%.
 
 ### 2. Appropriate machine representation
 
-**🚧 This feature is in progress**
-
 Compressio uses visions to infer the semantic type of data and coerce it into alternative computational representations which minimize memory impact while maintaining it's semantic meaning.
 
 
@@ -127,3 +125,15 @@ The key insights from this analysis are:
 - The size of the Series is _not_ decisive for the string representation choice.
 
 You can find the full analysis [here](examples/notebooks/pandas%20string%20type%20analysis.ipynb).
+
+## Gotcha's
+
+Compressing DataFrames can be helpful in many situations, but not all.
+Be mindful of how to apply it in the following cases:
+
+- _Overflow_: compression by dropping precision can lead to overflows if the array is manipulated afterwards. 
+This can be an issue for instance for [numpy integers](https://mortada.net/can-integer-operations-overflow-in-python.html). In case this is a problem for your application, you can explicitly choose a precision.
+
+- _Compatibility_: other libraries may make different decisions to how to handle your compressed data.
+One example where code needs to be adjusted to the compressed data is when the sparse data structure is used in combination with [`.groupby`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html). (`observed` must be set to `True`).
+This [article](https://pythonspeed.com/articles/numpy-memory-footprint/#when-these-strategies-wont-work) provides another example of scikit-image, which for some functions immediately converts a given array to a float64 dtype.
