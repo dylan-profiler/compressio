@@ -8,6 +8,8 @@ from visions import StandardSet
 from compressio.compress import compress_func
 from compressio.type_compressor import SparseCompressor
 
+nan_value = pd.NA if hasattr(pd, "NA") else None
+
 
 @pytest.mark.parametrize(
     "series,before,expected,inference",
@@ -27,7 +29,7 @@ from compressio.type_compressor import SparseCompressor
                 dtype="Int64",
             ),
             pd.Int64Dtype(),
-            pd.SparseDtype(np.int8, pd.NA),
+            pd.SparseDtype(np.int8, nan_value),
             True,
         ),
         (
@@ -41,7 +43,7 @@ from compressio.type_compressor import SparseCompressor
         ),
         (
             pd.Series(
-                [pd.NA] * 100 + [0] * 9000 + [1] * 500 + [2] * 400 + [3] * 10,
+                [nan_value] * 100 + [0] * 9000 + [1] * 500 + [2] * 400 + [3] * 10,
                 dtype="Int64",
             ),
             pd.Int64Dtype(),
@@ -68,7 +70,7 @@ from compressio.type_compressor import SparseCompressor
         ),
         (
             pd.Series(
-                [pd.NA] * 10000 + random.choices(["gold", "black", "silver"], k=10),
+                [nan_value] * 10000 + random.choices(["gold", "black", "silver"], k=10),
                 dtype=str,
             ),
             np.object,
@@ -76,9 +78,9 @@ from compressio.type_compressor import SparseCompressor
             False,
         ),
         (
-            pd.Series([pd.NA] * 10000 + [True, False], dtype="boolean"),
+            pd.Series([nan_value] * 10000 + [True, False], dtype="boolean"),
             pd.BooleanDtype(),
-            pd.SparseDtype(bool, pd.NA),
+            pd.SparseDtype(bool, nan_value),
             False,
         ),
     ],
