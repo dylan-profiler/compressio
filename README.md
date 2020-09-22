@@ -85,7 +85,7 @@ When your data is not randomly distributed, it can be compressed ([Theory](https
 Low cardinality data can often be more efficiently stored using [sparse data structures](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.arrays.SparseArray.html#pandas.arrays.SparseArray), which are provided by pandas by default. 
 These structures offer efficiency by storing the predominant values only once and instead keeping indices for all other values.
 
-[This notebook](examples/notebooks/Sparse%20Data.ipynb) shows how to use compressio with sparse data structures.
+[This notebook](https://github.com/dylan-profiler/compressio/raw/master/examples/notebooks/Sparse%20Data.ipynb) shows how to use compressio with sparse data structures.
 
 Data structure optimization is not limited to sparse arrays but instead include numerous domain specific opportunities such as [run-length encoding (RLE)](https://www.dlsi.ua.es/~carrasco/papers/RLE%20-%20Run%20length%20Encoding.html) which can be applied to compress sequential data. 
 We note that a pandas-specific third-party implementation is currently under development: [RLEArray](https://github.com/JDASoftwareGroup/rle-array).
@@ -108,9 +108,9 @@ git clone https://github.com/dylan-profiler/compressio.git
 
 ### Examples
 
-[![Code example](images/notebook-example.png)](examples/notebooks/Compressio.ipynb).
+[![Code example](https://github.com/dylan-profiler/compressio/raw/master/images/notebook-example.png)](examples/notebooks/Compressio.ipynb).
 
-There is a collection of example notebooks to play with in the [examples directory](examples/notebooks/) with a quick start notebook available [here](examples/notebooks/Compressio.ipynb).
+There is a collection of example notebooks to play with in the [examples directory](https://github.com/dylan-profiler/compressio/raw/master/examples/notebooks/) with a quick start notebook available [here](https://github.com/dylan-profiler/compressio/raw/master/examples/notebooks/Compressio.ipynb).
 
 ## Optimizing strings in pandas
 
@@ -118,13 +118,13 @@ Pandas allows for multiple ways of storing strings: as string objects or as `pan
 
 How you store strings in pandas can significantly impact the RAM required. 
 
-[![Memory usage of string representations in pandas](images/str-type-1.1.0.png)](examples/notebooks/pandas%20string%20type%20analysis.ipynb)
+[![Memory usage of string representations in pandas](https://github.com/dylan-profiler/compressio/raw/master/images/str-type-1.1.0.png)](examples/notebooks/pandas%20string%20type%20analysis.ipynb)
 
 The key insights from this analysis are:
 - The Category is more memory efficient when values are recurring and the String representation the percentage of distinct values. 
 - The size of the Series is _not_ decisive for the string representation choice.
 
-You can find the full analysis [here](examples/notebooks/pandas%20string%20type%20analysis.ipynb).
+You can find the full analysis [here](https://github.com/dylan-profiler/compressio/raw/master/examples/notebooks/pandas%20string%20type%20analysis.ipynb).
 
 ## Gotcha's
 
