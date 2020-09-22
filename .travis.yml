@@ -1,0 +1,30 @@
+sudo: required
+dist: bionic
+language: python
+cache: pip
+
+python:
+  - '3.6'
+  - '3.7'
+  - '3.8'
+
+env:
+  - PANDAS="<1"
+  - PANDAS="==1.0.5"
+  - PANDAS=">1.1.0"
+  
+
+before_install:
+  - python -m pip install --upgrade pip setuptools wheel
+  - pip install -r requirements.txt
+  - pip install -r requirements_test.txt
+  - pip install "pandas$PANDAS"
+
+install:
+  - check-manifest
+  - python setup.py sdist bdist_wheel
+  - twine check dist/*
+  - pip install -e .
+
+script:
+  - pytest tests/
