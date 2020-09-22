@@ -1,4 +1,4 @@
-![Compressio Logo](images/logo/compressio-logos_transparent_banner.png)
+![Compressio Logo](https://github.com/dylan-profiler/compressio/raw/master/images/logo/compressio-logos_transparent_banner.png)
 
 # Compress*io*
 
