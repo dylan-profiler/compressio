@@ -1,4 +1,4 @@
-visions>=0.5.0
+visions>=0.6.0
 pint
 pandas
 numpy

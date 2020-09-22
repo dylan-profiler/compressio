@@ -10,7 +10,7 @@ from compressio.typing import pdT
 
 def get_data_and_dtype(data: pdT, typeset: VisionsTypeset, with_inference: bool):
     graph = typeset.relation_graph if with_inference else typeset.base_graph
-    data, dtype_path = traverse_graph(data, typeset.root_node, graph)
+    data, dtype_path, state = traverse_graph(data, typeset.root_node, graph)
     dtype = get_type_from_path(dtype_path)
     return data, dtype
 
