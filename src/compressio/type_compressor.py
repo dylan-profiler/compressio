@@ -26,7 +26,7 @@ from compressio.utils import compose
 
 @singledispatch
 def parse_func(f):
-    raise NotImplemented
+    raise NotImplementedError
 
 
 @parse_func.register(object)

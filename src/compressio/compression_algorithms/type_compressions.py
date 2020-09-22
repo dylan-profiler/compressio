@@ -2,7 +2,6 @@ from typing import Callable, Iterable, Type, Union
 
 import numpy as np
 import pandas as pd
-from pandas import CategoricalDtype
 
 
 def type_tester(
@@ -37,7 +36,7 @@ def compress_sparse(series: pd.Series) -> pd.Series:
 
     # pandas dtypes
     if pd.api.types.is_extension_array_dtype(test_dtype):
-        if test_dtype != CategoricalDtype():
+        if test_dtype != pd.CategoricalDtype():
             test_dtype = test_dtype.numpy_dtype
             fill_value = pd.NA
         else:
