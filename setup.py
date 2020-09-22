@@ -17,7 +17,7 @@ with (source_root / "requirements_test.txt").open(encoding="utf8") as f:
 
 setup(
     name="compressio",
-    version="0.1.1",
+    version="0.1.2",
     url="https://github.com/dylan-profiler/compressio",
     description="compressio",
     author="Ian Eaves, Simon Brugman",
