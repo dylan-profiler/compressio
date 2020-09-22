@@ -15,7 +15,7 @@ env:
   
 
 before_install:
-  - python -m pip install --upgrade pip setuptools wheel twine check-manifest
+  - python -m pip install --upgrade pip setuptools wheel
   - pip install -r requirements.txt
   - pip install -r requirements_test.txt
   - pip install "pandas$PANDAS"
@@ -27,4 +27,4 @@ install:
   - pip install -e .
 
 script:
-  - pytest src/
+  - pytest tests/
