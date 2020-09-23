@@ -37,7 +37,12 @@ def compress_sparse(series: pd.Series) -> pd.Series:
     # pandas dtypes
     if pd.api.types.is_extension_array_dtype(test_dtype):
         if test_dtype != pd.CategoricalDtype():
-            test_dtype = test_dtype.numpy_dtype
+            if hasattr(test_dtype, "numpy_dtype"):
+                test_dtype = test_dtype.numpy_dtype
+            elif hasattr(test_dtype, "type"):
+                test_dtype = test_dtype.type
+            else:
+                raise ValueError(f"Couldn't obtain the dtype of {type(test_dtype)}")
             fill_value = pd.NA
         else:
             test_dtype = np.object
