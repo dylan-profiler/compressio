@@ -2,20 +2,14 @@ import numpy as np
 import pandas as pd
 import pytest
 import visions
-from pandas._testing import assert_series_equal
+from pandas.testing import assert_series_equal
 from visions import StandardSet
 
 from compressio.compress import compress_func
 from compressio.type_compressor import DefaultCompressor
 
-if hasattr(visions, "BoolDtype"):
-    from visions import BoolDtype
 
-    bool_type = BoolDtype
-elif hasattr(pd, "BooleanDtype"):
-    bool_type = pd.BooleanDtype
-else:
-    raise RuntimeError("No boolean Dtype found. Please update visions/pandas")
+bool_dtype = "boolean" if int(pd.__version__.split(".")[0]) >= 1 else "Bool"
 
 
 @pytest.mark.parametrize(
@@ -30,7 +24,7 @@ else:
         (
             pd.Series([True, False, None, None, None, None, True, False] * 1000),
             np.object,
-            bool_type,
+            bool_dtype,
         ),
     ],
 )

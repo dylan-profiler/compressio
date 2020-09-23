@@ -9,6 +9,7 @@ from compressio.compress import compress_func
 from compressio.type_compressor import SparseCompressor
 
 nan_value = pd.NA if hasattr(pd, "NA") else None
+bool_dtype = "boolean" if int(pd.__version__.split(".")[0]) >= 1 else "Bool"
 
 
 @pytest.mark.parametrize(
@@ -78,8 +79,8 @@ nan_value = pd.NA if hasattr(pd, "NA") else None
             False,
         ),
         (
-            pd.Series([nan_value] * 10000 + [True, False], dtype="boolean"),
-            pd.BooleanDtype(),
+            pd.Series([nan_value] * 10000 + [True, False], dtype=bool_dtype),
+            bool_dtype,
             pd.SparseDtype(bool, nan_value),
             False,
         ),

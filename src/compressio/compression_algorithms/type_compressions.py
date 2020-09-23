@@ -3,6 +3,8 @@ from typing import Callable, Iterable, Type, Union
 import numpy as np
 import pandas as pd
 
+nan_value = pd.NA if hasattr(pd, "NA") else None
+
 
 def type_tester(
     minv: Union[int, float], maxv: Union[int, float], info_func: Callable
@@ -43,7 +45,7 @@ def compress_sparse(series: pd.Series) -> pd.Series:
                 test_dtype = test_dtype.type
             else:
                 raise ValueError(f"Couldn't obtain the dtype of {type(test_dtype)}")
-            fill_value = pd.NA
+            fill_value = nan_value
         else:
             test_dtype = np.object
 
