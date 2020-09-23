@@ -8,7 +8,6 @@ from visions import StandardSet
 from compressio.compress import compress_func
 from compressio.type_compressor import DefaultCompressor
 
-
 bool_dtype = "boolean" if int(pd.__version__.split(".")[0]) >= 1 else "Bool"
 
 

@@ -3,7 +3,7 @@ from typing import Callable, Iterable, Type, Union
 import numpy as np
 import pandas as pd
 
-nan_value = pd.NA if hasattr(pd, "NA") else None
+nan_value = pd.NA if hasattr(pd, "NA") else np.nan
 
 
 def type_tester(
@@ -23,7 +23,7 @@ def get_compressed_type(
     return next(test_sequence)
 
 
-def compress_sparse(series: pd.Series) -> pd.Series:
+def compress_sparse_missing(series: pd.Series) -> pd.Series:
     """Compresses the data by using the SparseArray data structure for missing values/nans
 
     :param series: series to compress
@@ -50,12 +50,14 @@ def compress_sparse(series: pd.Series) -> pd.Series:
             test_dtype = np.object
 
     new_series = pd.Series(
-        pd.arrays.SparseArray(series, dtype=test_dtype, fill_value=fill_value)
+        pd.arrays.SparseArray(
+            series[series.notnull()], dtype=test_dtype, fill_value=fill_value
+        )
     )
     if new_series.memory_usage() < series.memory_usage():
         return new_series
-    else:
-        return series
+
+    return series
 
 
 def compress_float(series: pd.Series) -> pd.Series:

@@ -8,7 +8,7 @@ from visions import StandardSet
 from compressio.compress import compress_func
 from compressio.type_compressor import SparseCompressor
 
-nan_value = pd.NA if hasattr(pd, "NA") else None
+nan_value = pd.NA if hasattr(pd, "NA") else np.nan
 bool_dtype = "boolean" if int(pd.__version__.split(".")[0]) >= 1 else "Bool"
 
 
@@ -95,5 +95,3 @@ def test_compress_series(series, before, expected, inference):
         with_inference=inference,
     )
     assert compressed_series.dtype == expected
-
-    # TODO: assert values
