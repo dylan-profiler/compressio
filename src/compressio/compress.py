@@ -58,15 +58,14 @@ class Compress:
         typeset: VisionsTypeset = None,
         compressor: BaseTypeCompressor = None,
         with_type_inference: bool = False,
-        inplace: bool = False,
     ) -> None:
         self.typeset = typeset if typeset is not None else StandardSet()
         self.compressor = compressor if compressor is not None else DefaultCompressor()
         self.with_type_inference = with_type_inference
         self.inplace = inplace
 
-    def it(self, data: pdT) -> pdT:
+    def it(self, data: pdT, inplace: bool = False) -> pdT:
         data = compress_func(
-            data, self.typeset, self.compressor, self.with_type_inference, self.inplace
+            data, self.typeset, self.compressor, self.with_type_inference, inplace
         )
         return data
