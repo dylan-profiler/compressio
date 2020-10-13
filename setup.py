@@ -14,10 +14,14 @@ with (source_root / "requirements.txt").open(encoding="utf8") as f:
 with (source_root / "requirements_test.txt").open(encoding="utf8") as f:
     test_requirements = f.readlines()
 
+__version__ = None
+with (source_root / "src/compressio/version.py").open(encoding="utf8") as f:
+    exec(f.read())
+
 
 setup(
     name="compressio",
-    version="0.1.3",
+    version=__version__,
     url="https://github.com/dylan-profiler/compressio",
     description="compressio",
     author="Ian Eaves, Simon Brugman",

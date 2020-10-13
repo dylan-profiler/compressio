@@ -1,4 +1,3 @@
-"""Work in progress"""
 from functools import singledispatch
 
 import pandas as pd
@@ -11,18 +10,18 @@ from compressio.typing import pdT
 
 
 @singledispatch
-def storage_size(data: pdT, deep=True) -> Quantity:
+def storage_size(data: pdT) -> Quantity:
     raise TypeError(f"Can't compute memory size of objects with type {type(data)}")
 
 
 @storage_size.register(pd.Series)  # type: ignore
-def _(data: pd.Series, deep) -> Quantity:
-    return Quantity(value=data.memory_usage(deep=deep), units="byte")
+def _(data: pd.Series) -> Quantity:
+    return Quantity(value=data.memory_usage(deep=True), units="byte")
 
 
 @storage_size.register(pd.DataFrame)  # type: ignore
-def _(data: pd.DataFrame, deep=False) -> Quantity:
-    return Quantity(value=data.memory_usage(deep=deep).sum(), units="byte")
+def _(data: pd.DataFrame) -> Quantity:
+    return Quantity(value=data.memory_usage(deep=True).sum(), units="byte")
 
 
 @singledispatch
@@ -65,19 +64,15 @@ def _(
         compress_report(data[column], typeset, compressor, with_inference, units)
 
 
-def savings(
-    original_data: pdT, new_data: pdT, units="megabyte", deep=False
-) -> Quantity:
-    original_size = storage_size(original_data, deep)
-    new_size = storage_size(new_data, deep)
+def savings(original_data: pdT, new_data: pdT, units: str = "megabyte",) -> Quantity:
+    original_size = storage_size(original_data)
+    new_size = storage_size(new_data)
     return (original_size - new_size).to(units)
 
 
-def savings_report(
-    original_data: pdT, new_data: pdT, units="megabyte", deep=False
-) -> None:
-    original_size = storage_size(original_data, deep).to(units)
-    new_size = storage_size(new_data, deep).to(units)
+def savings_report(original_data: pdT, new_data: pdT, units: str = "megabyte",) -> None:
+    original_size = storage_size(original_data).to(units)
+    new_size = storage_size(new_data).to(units)
     reduction = original_size - new_size
     print(f"Original size: {original_size}")
     print(f"Compressed size: {new_size}")
