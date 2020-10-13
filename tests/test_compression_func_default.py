@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import pytest
-import visions
 from pandas.testing import assert_series_equal
 from visions import StandardSet
 
@@ -17,9 +16,9 @@ bool_dtype = "boolean" if int(pd.__version__.split(".")[0]) >= 1 else "Bool"
         (
             pd.Series([10.0, 100.0, np.iinfo(np.int16).max * 1.0], dtype=np.float64),
             np.float64,
-            np.int16,
+            "int16",
         ),
-        (pd.Series([np.nan, 1], dtype=np.float64), np.float64, pd.Int8Dtype),
+        (pd.Series([np.nan, 1], dtype=np.float64), np.float64, "Int8"),
         (
             pd.Series([True, False, None, None, None, None, True, False] * 1000),
             np.object,
@@ -35,8 +34,7 @@ def test_compress_series(series, before, expected):
         compressor=DefaultCompressor(),
         with_inference=True,
     )
-    assert compressed_series.dtype == expected or isinstance(
-        compressed_series.dtype, expected
-    )
+
+    assert str(compressed_series.dtype) == expected
 
     assert_series_equal(series, compressed_series, check_dtype=False)
