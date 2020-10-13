@@ -18,20 +18,6 @@ def test_copy_frame():
     assert id(df) != id(compressed_df)
 
 
-def test_inplace_series():
-    series = pd.Series([1], dtype="int64")
-
-    compressed_series = compress_func(
-        series,
-        typeset=StandardSet(),
-        compressor=DefaultCompressor(),
-        with_inference=True,
-        inplace=True,
-    )
-
-    assert id(series) == id(compressed_series)
-
-
 def test_inplace_frame():
     df = pd.DataFrame({"column": pd.Series([1], dtype="int64")})
 
