@@ -48,7 +48,7 @@ def _(
 ) -> pd.DataFrame:
     result = data if inplace else pd.DataFrame()
     for col in data.columns:
-        result[col] = compress_func(data[col], typeset, compressor, with_inference)
+        result[col] = compress_func(data[col], typeset, compressor, with_inference, inplace)
     return result
 
 
