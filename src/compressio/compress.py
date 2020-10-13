@@ -33,7 +33,6 @@ def _(
     compressor: BaseTypeCompressor,
     with_inference: bool,
     inplace: bool = False,
-
 ) -> pd.Series:
     data, dtype = get_data_and_dtype(data, typeset, with_inference)
     return compressor.compress(data, dtype)
@@ -49,7 +48,9 @@ def _(
 ) -> pd.DataFrame:
     result = data if inplace else pd.DataFrame()
     for col in data.columns:
-        result[col] = compress_func(data[col], typeset, compressor, with_inference, inplace)
+        result[col] = compress_func(
+            data[col], typeset, compressor, with_inference, inplace
+        )
     return result
 
 
