@@ -12,6 +12,8 @@ from compressio.type_compressor import (
     SparseCompressor,
 )
 
+from .version import __version__
+
 __all__ = [
     "Compress",
     "storage_size",
@@ -22,4 +24,5 @@ __all__ = [
     "DefaultCompressor",
     "SparseCompressor",
     "type_compressions",
+    "__version__",
 ]

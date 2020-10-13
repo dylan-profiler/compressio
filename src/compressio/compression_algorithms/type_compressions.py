@@ -54,7 +54,7 @@ def compress_sparse_missing(series: pd.Series) -> pd.Series:
             series[series.notnull()], dtype=test_dtype, fill_value=fill_value
         )
     )
-    if new_series.memory_usage() < series.memory_usage():
+    if new_series.memory_usage(deep=True) < series.memory_usage(deep=True):
         return new_series
 
     return series
@@ -127,7 +127,7 @@ def compress_complex(series: pd.Series) -> pd.Series:
 def compress_object(series: pd.Series) -> pd.Series:
     try:
         new_series = series.astype("category")
-        if new_series.memory_usage() < series.memory_usage():
+        if new_series.memory_usage(deep=True) < series.memory_usage(deep=True):
             return new_series
     except:  # noqa
         pass
@@ -137,7 +137,7 @@ def compress_object(series: pd.Series) -> pd.Series:
 def compress_datetime(series: pd.Series) -> pd.Series:
     try:
         new_series = series.astype("category")
-        if new_series.memory_usage() < series.memory_usage():
+        if new_series.memory_usage(deep=True) < series.memory_usage(deep=True):
             return new_series
     except:  # noqa
         pass
