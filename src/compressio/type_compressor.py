@@ -19,14 +19,14 @@ from compressio.compression_algorithms import (
     compress_float,
     compress_integer,
     compress_object,
-    compress_sparse,
+    compress_sparse_missing,
 )
 from compressio.utils import compose
 
 
 @singledispatch
 def parse_func(f):
-    raise NotImplemented
+    raise NotImplementedError
 
 
 @parse_func.register(object)
@@ -65,13 +65,13 @@ class DefaultCompressor(BaseTypeCompressor):
 class SparseCompressor(BaseTypeCompressor):
     def __init__(self, *args, **kwargs):
         compression_map = {
-            Integer: [compress_sparse, compress_integer],
-            Float: [compress_sparse, compress_float],
-            Complex: [compress_sparse, compress_complex],
+            Integer: [compress_sparse_missing, compress_integer],
+            Float: [compress_sparse_missing, compress_float],
+            Complex: [compress_sparse_missing, compress_complex],
             Object: compress_object,
-            Boolean: compress_sparse,
+            Boolean: compress_sparse_missing,
             # Pending https://github.com/pandas-dev/pandas/issues/35762
             DateTime: compress_datetime,
-            String: [compress_sparse, compress_object],
+            String: [compress_sparse_missing, compress_object],
         }
         super().__init__(compression_map, *args, **kwargs)

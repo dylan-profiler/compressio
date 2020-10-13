@@ -2,7 +2,8 @@ from typing import Callable, Iterable, Type, Union
 
 import numpy as np
 import pandas as pd
-from pandas import CategoricalDtype
+
+nan_value = pd.NA if hasattr(pd, "NA") else np.nan
 
 
 def type_tester(
@@ -22,7 +23,7 @@ def get_compressed_type(
     return next(test_sequence)
 
 
-def compress_sparse(series: pd.Series) -> pd.Series:
+def compress_sparse_missing(series: pd.Series) -> pd.Series:
     """Compresses the data by using the SparseArray data structure for missing values/nans
 
     :param series: series to compress
@@ -37,19 +38,26 @@ def compress_sparse(series: pd.Series) -> pd.Series:
 
     # pandas dtypes
     if pd.api.types.is_extension_array_dtype(test_dtype):
-        if test_dtype != CategoricalDtype():
-            test_dtype = test_dtype.numpy_dtype
-            fill_value = pd.NA
+        if test_dtype != pd.CategoricalDtype():
+            if hasattr(test_dtype, "numpy_dtype"):
+                test_dtype = test_dtype.numpy_dtype
+            elif hasattr(test_dtype, "type"):
+                test_dtype = test_dtype.type
+            else:
+                raise ValueError(f"Couldn't obtain the dtype of {type(test_dtype)}")
+            fill_value = nan_value
         else:
             test_dtype = np.object
 
     new_series = pd.Series(
-        pd.arrays.SparseArray(series, dtype=test_dtype, fill_value=fill_value)
+        pd.arrays.SparseArray(
+            series[series.notnull()], dtype=test_dtype, fill_value=fill_value
+        )
     )
     if new_series.memory_usage() < series.memory_usage():
         return new_series
-    else:
-        return series
+
+    return series
 
 
 def compress_float(series: pd.Series) -> pd.Series:
