@@ -93,5 +93,6 @@ def test_compress_series(series, before, expected, inference):
         typeset=StandardSet(),
         compressor=SparseCompressor(),
         with_inference=inference,
+        inplace=False,
     )
     assert compressed_series.dtype == expected
