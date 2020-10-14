@@ -56,6 +56,7 @@ class DefaultCompressor(BaseTypeCompressor):
             Float: compress_float,
             Complex: compress_complex,
             Object: compress_object,
+            String: compress_object,
         }
         super().__init__(compression_map, *args, **kwargs)
 

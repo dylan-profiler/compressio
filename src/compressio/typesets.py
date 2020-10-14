@@ -4,7 +4,7 @@ from visions.typesets import VisionsTypeset
 
 class DefaultCompressioTypeset(VisionsTypeset):
     def __init__(self):
-        types = [Object, Integer, Float, Complex, Generic, String]
+        types = [Object, String, Integer, Float, Complex, Generic]
         super().__init__(types)
 
 
