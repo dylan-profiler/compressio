@@ -21,6 +21,7 @@ def compress_func(
     typeset: VisionsTypeset,
     compressor: BaseTypeCompressor,
     with_inference: bool,
+    inplace: bool = False,
 ) -> pdT:
     raise Exception(f"Unsupported datatype {type(data)}")
 
@@ -31,6 +32,7 @@ def _(
     typeset: VisionsTypeset,
     compressor: BaseTypeCompressor,
     with_inference: bool,
+    inplace: bool = False,
 ) -> pd.Series:
     data, dtype = get_data_and_dtype(data, typeset, with_inference)
     return compressor.compress(data, dtype)
@@ -42,13 +44,14 @@ def _(
     typeset: VisionsTypeset,
     compressor: BaseTypeCompressor,
     with_inference: bool,
+    inplace: bool = False,
 ) -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            col: compress_func(data[col], typeset, compressor, with_inference)
-            for col in data.columns
-        }
-    )
+    result = data if inplace else pd.DataFrame()
+    for col in data.columns:
+        result[col] = compress_func(
+            data[col], typeset, compressor, with_inference, inplace
+        )
+    return result
 
 
 class Compress:
@@ -62,8 +65,8 @@ class Compress:
         self.compressor = compressor if compressor is not None else DefaultCompressor()
         self.with_type_inference = with_type_inference
 
-    def it(self, data: pdT) -> pdT:
+    def it(self, data: pdT, inplace: bool = False) -> pdT:
         data = compress_func(
-            data, self.typeset, self.compressor, self.with_type_inference
+            data, self.typeset, self.compressor, self.with_type_inference, inplace
         )
         return data

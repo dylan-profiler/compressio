@@ -33,6 +33,7 @@ def test_compress_series(series, before, expected):
         typeset=StandardSet(),
         compressor=DefaultCompressor(),
         with_inference=True,
+        inplace=False,
     )
 
     assert str(compressed_series.dtype) == expected
