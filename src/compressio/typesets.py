@@ -1,4 +1,4 @@
-from visions import String, Object, Integer, Float, Complex, Generic
+from visions import String, Object, Integer, Float, Complex, Generic, DateTime, Boolean
 from visions.typesets import VisionsTypeset
 
 
@@ -10,5 +10,5 @@ class DefaultCompressioTypeset(VisionsTypeset):
 
 class SparseCompressioTypeset(VisionsTypeset):
     def __init__(self):
-        types = [Object, String, Integer, Float, Complex, Generic]
+        types = [Object, String, Integer, Float, Complex, DateTime, Boolean, Generic]
         super().__init__(types)

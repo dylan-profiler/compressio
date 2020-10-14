@@ -24,5 +24,7 @@ __all__ = [
     "DefaultCompressor",
     "SparseCompressor",
     "type_compressions",
+    "DefaultCompressioTypeset",
+    "SparseCompressioTypeset",
     "__version__",
 ]
