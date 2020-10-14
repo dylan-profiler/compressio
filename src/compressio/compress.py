@@ -1,11 +1,13 @@
 from functools import singledispatch
 
 import pandas as pd
-from visions import StandardSet, VisionsTypeset
+from visions import VisionsTypeset
 from visions.typesets.typeset import get_type_from_path, traverse_graph
 
+from compressio.typesets import DefaultCompressioTypeset
 from compressio.type_compressor import BaseTypeCompressor, DefaultCompressor
 from compressio.typing import pdT
+from tqdm import tqdm
 
 
 def get_data_and_dtype(data: pdT, typeset: VisionsTypeset, with_inference: bool):
@@ -47,7 +49,7 @@ def _(
     inplace: bool = False,
 ) -> pd.DataFrame:
     result = data if inplace else pd.DataFrame()
-    for col in data.columns:
+    for col in tqdm(data.columns):
         result[col] = compress_func(
             data[col], typeset, compressor, with_inference, inplace
         )
@@ -61,7 +63,7 @@ class Compress:
         compressor: BaseTypeCompressor = None,
         with_type_inference: bool = False,
     ) -> None:
-        self.typeset = typeset if typeset is not None else StandardSet()
+        self.typeset = typeset if typeset is not None else DefaultCompressioTypeset()
         self.compressor = compressor if compressor is not None else DefaultCompressor()
         self.with_type_inference = with_type_inference
 

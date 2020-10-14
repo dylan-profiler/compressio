@@ -11,7 +11,7 @@ from compressio.type_compressor import (
     DefaultCompressor,
     SparseCompressor,
 )
-
+from compressio.typesets import DefaultCompressioTypeset, SparseCompressioTypeset
 from .version import __version__
 
 __all__ = [
@@ -24,5 +24,7 @@ __all__ = [
     "DefaultCompressor",
     "SparseCompressor",
     "type_compressions",
+    "DefaultCompressioTypeset",
+    "SparseCompressioTypeset",
     "__version__",
 ]
