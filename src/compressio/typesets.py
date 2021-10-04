@@ -1,4 +1,4 @@
-from visions import String, Object, Integer, Float, Complex, Generic, DateTime, Boolean
+from visions import Boolean, Complex, DateTime, Float, Generic, Integer, Object, String
 from visions.typesets import VisionsTypeset
 
 

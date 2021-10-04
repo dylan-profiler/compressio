@@ -64,13 +64,21 @@ def _(
         compress_report(data[column], typeset, compressor, with_inference, units)
 
 
-def savings(original_data: pdT, new_data: pdT, units: str = "megabyte",) -> Quantity:
+def savings(
+    original_data: pdT,
+    new_data: pdT,
+    units: str = "megabyte",
+) -> Quantity:
     original_size = storage_size(original_data)
     new_size = storage_size(new_data)
     return (original_size - new_size).to(units)
 
 
-def savings_report(original_data: pdT, new_data: pdT, units: str = "megabyte",) -> None:
+def savings_report(
+    original_data: pdT,
+    new_data: pdT,
+    units: str = "megabyte",
+) -> None:
     original_size = storage_size(original_data).to(units)
     new_size = storage_size(new_data).to(units)
     reduction = original_size - new_size

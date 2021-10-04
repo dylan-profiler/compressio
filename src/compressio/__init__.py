@@ -12,6 +12,7 @@ from compressio.type_compressor import (
     SparseCompressor,
 )
 from compressio.typesets import DefaultCompressioTypeset, SparseCompressioTypeset
+
 from .version import __version__
 
 __all__ = [

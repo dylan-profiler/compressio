@@ -1,5 +1,6 @@
 import pandas as pd
-from compressio import storage_size, savings
+
+from compressio import savings, storage_size
 
 
 def test_size_formatting():

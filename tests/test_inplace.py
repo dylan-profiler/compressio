@@ -1,7 +1,8 @@
 import pandas as pd
+from visions import StandardSet
+
 from compressio import DefaultCompressor
 from compressio.compress import compress_func
-from visions import StandardSet
 
 
 def test_copy_frame():

@@ -1,13 +1,13 @@
 from functools import singledispatch
 
 import pandas as pd
+from tqdm import tqdm
 from visions import VisionsTypeset
 from visions.typesets.typeset import get_type_from_path, traverse_graph
 
-from compressio.typesets import DefaultCompressioTypeset
 from compressio.type_compressor import BaseTypeCompressor, DefaultCompressor
+from compressio.typesets import DefaultCompressioTypeset
 from compressio.typing import pdT
-from tqdm import tqdm
 
 
 def get_data_and_dtype(data: pdT, typeset: VisionsTypeset, with_inference: bool):
